@@ -1,0 +1,15 @@
+/* Tobiishi's own layout, after the unchanged family.css. */
+:root{--intro-room:8rem;--intro-room-wide:5rem}
+.layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:24px;align-items:start}
+aside h2,.panel-head h2{font-size:1.05rem;margin:0 0 12px}
+#settings .controls{display:block}#settings label{display:flex;flex-direction:column;gap:6px;font-size:.85rem;margin-bottom:12px;color:var(--muted)}
+#settings select{width:100%;min-width:0}aside p{font-size:.85rem;color:var(--muted);line-height:1.5}
+.game-screen .tobiishi{max-width:600px;color:var(--felt-ink)}
+.game-screen .tobiishi h2,.game-screen .tobiishi .instructions{display:none}
+.game-screen .tobiishi .board{margin:0}
+.game-screen .tobiishi .controls{margin:12px 0 0}
+.game-screen .tobiishi .controls button{border-radius:999px;background:rgba(0,0,0,.28);color:var(--felt-ink);border-color:rgba(255,255,255,.35);font-size:.85rem}
+.game-screen .tobiishi .status{min-height:1.5em;margin:10px 0;font-size:.9rem}
+@media(max-width:700px){.layout{grid-template-columns:1fr}.game-screen{padding:14px 10px}}
+
+aside{padding:16px;border:1px solid var(--rule);border-radius:16px;background:var(--surface)}

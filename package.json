@@ -1,0 +1,76 @@
+{
+  "name": "@johnmorrisdotca/tobiishi",
+  "version": "0.1.0",
+  "description": "Peg solitaire on nine classic, shaped, wide and tall boards. Immutable engine, seeded solvable challenges, configurable materials, SVG drawing and accessible English/Japanese play. Zero runtime dependencies.",
+  "type": "module",
+  "author": "John Morris",
+  "license": "MIT",
+  "sideEffects": [
+    "./dist/element-define.js"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./draw": {
+      "types": "./dist/draw-entry.d.ts",
+      "import": "./dist/draw-entry.js",
+      "default": "./dist/draw-entry.js"
+    },
+    "./play": {
+      "types": "./dist/play-entry.d.ts",
+      "import": "./dist/play-entry.js",
+      "default": "./dist/play-entry.js"
+    },
+    "./element": {
+      "types": "./dist/element.d.ts",
+      "import": "./dist/element.js",
+      "default": "./dist/element.js"
+    },
+    "./element/define": {
+      "types": "./dist/element-define.d.ts",
+      "import": "./dist/element-define.js",
+      "default": "./dist/element-define.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "test:browser": "playwright test",
+    "check": "npm run typecheck && npm test",
+    "demo": "npm run build && node scripts/site.mjs && node scripts/serve.mjs",
+    "prepublishOnly": "npm run check",
+    "test:package": "npm run build && node scripts/check-package.mjs",
+    "site": "npm run build && node scripts/site.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "@playwright/test": "^1.58.2"
+  },
+  "packageManager": "pnpm@10.11.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johnmorrisdotca/tobiishi.git"
+  },
+  "homepage": "https://johnmorrisdotca.github.io/tobiishi/",
+  "bugs": {
+    "url": "https://github.com/johnmorrisdotca/tobiishi/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
