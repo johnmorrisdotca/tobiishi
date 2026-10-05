@@ -1,4 +1,4 @@
-import { boardOf, type Board, type Jump, type Shape } from "./board.js";
+import { boardOf, type Board, type Cell, type Jump, type Shape } from "./board.js";
 import { newGame, type Game } from "./game.js";
 export type Challenge = Readonly<{ game: Game; answer: readonly Jump[]; seed: string }>;
 export function seededRandom(seed: string): () => number {
@@ -12,13 +12,15 @@ export function seededRandom(seed: string): () => number {
   };
 }
 /** Grow backward from one peg. The reversed jumps are a proof, even on unusual boards. */
-export function generate(board: Board, seed: string, jumps = 12): Challenge {
+export function generate(board: Board, seed: string, jumps = 12, goal?: number): Challenge {
   if (!Number.isSafeInteger(jumps) || jumps < 1 || jumps >= board.cells.length)
     throw new RangeError("Invalid challenge length");
+  if (goal !== undefined && (!Number.isSafeInteger(goal) || goal < 0 || goal >= board.cells.length))
+    throw new RangeError("Invalid goal hole");
   const random = seededRandom(seed);
   let best: Challenge | null = null;
   for (let attempt = 0; attempt < 160; attempt += 1) {
-    const target = Math.floor(random() * board.cells.length);
+    const target = goal ?? Math.floor(random() * board.cells.length);
     const pegs = board.cells.map((_, i) => i === target),
       answer: Jump[] = [];
     while (answer.length < jumps) {
@@ -63,8 +65,12 @@ export function classicEnglish(): Challenge {
     seed: "classic",
   });
 }
-export function challengeOf(shape: Shape, seed = "tobiishi", jumps = 12): Challenge {
-  return generate(boardOf(shape), seed, jumps);
+export function challengeOf(shape: Shape, seed = "tobiishi", jumps = 12, goal?: Cell): Challenge {
+  const board = boardOf(shape);
+  if (goal === undefined) return generate(board, seed, jumps);
+  const goalIndex = board.cells.findIndex(cell => cell.x === goal.x && cell.y === goal.y);
+  if (goalIndex < 0) throw new RangeError("The goal is not a hole on this board");
+  return generate(board, seed, jumps, goalIndex);
 }
 
 /** The full fifteen-hole triangle, with the apex empty and any final hole accepted. */

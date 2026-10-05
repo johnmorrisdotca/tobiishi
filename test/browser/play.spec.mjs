@@ -65,3 +65,29 @@ test("new challenges and keyboard selection work", async ({ page }) => {
   await page.locator(`.cell[data-cell="${from}"]`).press("Escape");
   await expect(page.locator('.cell[aria-pressed="true"]')).toHaveCount(0);
 });
+
+test("named packs select a fixed goal, show its witness and restore assisted progress", async ({ page }) => {
+  const errors = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto("/");
+  await page.locator("#challenge-pack").selectOption("wide");
+  await page.locator("#challenge-difficulty").selectOption("easy");
+  await page.locator("#goal-hole").selectOption("north");
+  await page.getByRole("button", { name: "Play this challenge", exact: true }).click();
+  await expect(page.locator("#challenge-status")).toContainText("Long Table");
+  const selected = await page.evaluate(async () => {
+    const api = await import("/dist/index.js");
+    const challenge = api.generateTobiishiChallenge("wide", "north", "easy");
+    return { target: window.tobiishi.getGame().target, expected: challenge.game.target, jumps: challenge.answer.length };
+  });
+  expect(selected.target).toBe(selected.expected);
+  expect(selected.jumps).toBe(3);
+  await page.getByRole("button", { name: "Hint", exact: true }).click();
+  await expect(page.locator("#game")).toHaveAttribute("data-helped", "true");
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("tobiishi-progress-v1")));
+  expect(saved.challenge).toEqual({ pack: "wide", goal: "north", difficulty: "easy" });
+  expect(saved.progress).toContain('"helped":true');
+  await page.reload();
+  await expect(page.locator("#game")).toHaveAttribute("data-helped", "true");
+  expect(errors).toEqual([]);
+});

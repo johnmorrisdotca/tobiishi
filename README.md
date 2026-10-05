@@ -56,7 +56,28 @@ proof for instant hints along its answer. Configure `shape`, `seed`, `language`,
 New challenge grows a fresh proved position on the selected board, including the
 English and triangular shapes; its requested length defaults to twelve jumps. Just-board
 mode retains the board and live status; host controls can call `setGame` with
-`undo`, `restart`, or a new game. No global storage or telemetry is used.
+`undo`, `restart`, or a new game. The engine has no automatic persistence or telemetry; the demo saves its selected pack and current game to local storage on this device.
+
+### Short goal challenge packs
+
+The demo also has nine named board packs, one for each built-in shape. Each pack
+offers three distinct target holes and three short levels: 3, 6, or 9 jumps.
+Choose the board pack, difficulty, and target hole before starting. Every one of
+the 81 combinations has a deterministic original starting layout and a complete
+legal witness sequence; the built-in Hint follows that witness. Difficulty here
+means the length of the witness, not a claim about solving skill. Challenge saves
+keep the selected pack, goal, difficulty, current game and assisted flag on the
+device. Sharing the challenge URL restores the named starting challenge.
+
+```ts
+import { generateTobiishiChallenge } from '@johnmorrisdotca/tobiishi';
+
+const challenge = generateTobiishiChallenge('wide', 'north', 'medium');
+// challenge.game.target names the North lane; challenge.answer has six legal jumps.
+```
+
+The pack definitions are in `src/challenges.ts`; tests replay every witness and
+check that its final peg occupies the selected hole.
 
 ## Engine
 
