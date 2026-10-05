@@ -1,6 +1,6 @@
 {
   "name": "@johnmorrisdotca/tobiishi",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Peg solitaire on nine classic, shaped, wide and tall boards. Immutable engine, seeded solvable challenges, configurable materials, SVG drawing and accessible English/Japanese play. Zero runtime dependencies.",
   "type": "module",
   "author": "John Morris",
