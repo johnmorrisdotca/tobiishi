@@ -1,13 +1,17 @@
 import { boardOf, type Shape } from "./board.js";
 import { challengeOf, type Challenge } from "./generate.js";
 
+/** Requested witness length category; this is not a measured human rating. */
 export type ChallengeDifficulty = "easy" | "medium" | "hard";
+/** Named goal hole and its localized menu labels. */
 export type GoalHole = Readonly<{ id: string; names: Readonly<Record<"en" | "ja", string>>; x: number; y: number }>;
+/** Curated goal choices for one supported board shape. */
 export type ChallengePack = Readonly<{
   title: Readonly<Record<"en" | "ja", string>>;
   shape: Shape;
   goals: readonly GoalHole[];
 }>;
+/** Generated puzzle augmented with its pack, goal, and requested length category. */
 export type GoalChallenge = Challenge & Readonly<{
   pack: Shape;
   packTitle: string;
@@ -22,7 +26,7 @@ const goal = (id: string, en: string, ja: string, x: number, y: number): GoalHol
   y,
 });
 
-/** Short, named routes. Each goal is a distinct hole; every route has a legal witness. */
+/** Named challenge pack metadata; each goal is a distinct hole with a legal witness. */
 export const TOBIISHI_CHALLENGE_PACKS: Readonly<Record<Shape, ChallengePack>> = {
   english: {
     title: { en: "Crossroads", ja: "交差点" }, shape: "english",

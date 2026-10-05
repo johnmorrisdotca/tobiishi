@@ -1,5 +1,6 @@
 import { jumpAt, isGameSolved, legalJumps, type Game } from "./game.js";
 import type { Jump } from "./board.js";
+/** Bounded search result; `limit` distinguishes unfinished search from proof. */
 export type Solution = { status: "solved" | "impossible" | "limit"; jumps: Jump[]; visited: number };
 /** A bounded depth-first proof search. A limit is never reported as impossibility. */
 export function solve(game: Game, maxNodes = 100000): Solution {

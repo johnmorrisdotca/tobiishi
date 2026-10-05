@@ -1,6 +1,8 @@
 import { boardOf, type Board, type Cell, type Jump, type Shape } from "./board.js";
 import { newGame, type Game } from "./game.js";
+/** A starting position paired with its complete legal witness and seed. */
 export type Challenge = Readonly<{ game: Game; answer: readonly Jump[]; seed: string }>;
+/** Creates a deterministic pseudo-random stream from a text seed. */
 export function seededRandom(seed: string): () => number {
   let state = 2166136261;
   for (const c of seed) state = Math.imul(state ^ c.charCodeAt(0), 16777619);
@@ -39,7 +41,7 @@ export function generate(board: Board, seed: string, jumps = 12, goal?: number):
   if (!best || best.answer.length === 0) throw new RangeError("Board has no challenge");
   return best;
 }
-/** The classic centre-empty English game. Bergholt's published 1912 solution is validated in tests. */
+/** Returns the classic centre-empty English game with its complete solution. */
 export function classicEnglish(): Challenge {
   const board = boardOf("english"),
     target = board.cells.findIndex((c) => c.x === 3 && c.y === 3);
@@ -65,6 +67,7 @@ export function classicEnglish(): Challenge {
     seed: "classic",
   });
 }
+/** Generates a seeded challenge on a built-in shape, optionally fixing its final hole. */
 export function challengeOf(shape: Shape, seed = "tobiishi", jumps = 12, goal?: Cell): Challenge {
   const board = boardOf(shape);
   if (goal === undefined) return generate(board, seed, jumps);
@@ -73,7 +76,7 @@ export function challengeOf(shape: Shape, seed = "tobiishi", jumps = 12, goal?: 
   return generate(board, seed, jumps, goalIndex);
 }
 
-/** The full fifteen-hole triangle, with the apex empty and any final hole accepted. */
+/** Returns the full triangle with the apex empty and any final hole accepted. */
 export function classicTriangle(): Challenge {
   const board = boardOf("triangle");
   const pairs = [

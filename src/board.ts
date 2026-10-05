@@ -1,13 +1,17 @@
-/** A hole is addressed by its place in the board's cells, never by a drawing. */
+/** A hole's stable coordinate within a board shape, independent of its drawing. */
 export type Cell = Readonly<{ x: number; y: number }>;
+/** A legal solitaire jump from an occupied hole over a peg to an empty hole. */
 export type Jump = Readonly<{ from: number; over: number; to: number }>;
+/** Immutable hole lattice and all legal jump triples for a board. */
 export type Board = Readonly<{
   name: string;
   lattice: "square" | "triangle";
   cells: readonly Cell[];
   jumps: readonly Jump[];
 }>;
+/** Built-in board outlines supported by the player and challenge packs. */
 export type Shape = "english" | "european" | "triangle" | "diamond" | "heart" | "star" | "hexagon" | "wide" | "tall";
+/** Built-in shape names in player-menu order. */
 export const SHAPES: readonly Shape[] = [
   "english",
   "triangle",
@@ -19,12 +23,14 @@ export const SHAPES: readonly Shape[] = [
   "wide",
   "tall",
 ];
+/** Orthogonal direction steps used by square-lattice boards. */
 export const SQUARE_STEPS = [
   [1, 0],
   [-1, 0],
   [0, 1],
   [0, -1],
 ] as const;
+/** Six jump directions used by the triangular lattice. */
 export const TRIANGLE_STEPS = [...SQUARE_STEPS, [1, 1], [-1, -1]] as const;
 
 /** Make a board from holes and a lattice; absent holes cannot be crossed. */
@@ -68,7 +74,7 @@ export function makeBoard(name: string, cells: readonly Cell[], lattice: Board["
   });
 }
 
-/** A rectangular square-lattice board; dimensions can be wide, tall, or square. */
+/** Creates a square-lattice rectangle, including supported wide and tall boards. */
 export function rectangleBoard(width: number, height: number): Board {
   if (
     !Number.isSafeInteger(width) ||

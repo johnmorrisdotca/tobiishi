@@ -1,4 +1,5 @@
 import { makeBoard, type Board, type Jump } from "./board.js";
+/** Immutable peg position, target, move history, and assistance marker. */
 export type Game = Readonly<{
   board: Board;
   start: readonly boolean[];
@@ -10,6 +11,7 @@ export type Game = Readonly<{
 }>;
 
 /** A game owns its board and pieces. A target of null permits any last hole. */
+/** Creates a validated immutable position with the given target hole, if any. */
 export function newGame(board: Board, pegs: readonly boolean[], target: number | null = null): Game {
   if (
     pegs.length !== board.cells.length ||
@@ -22,15 +24,19 @@ export function newGame(board: Board, pegs: readonly boolean[], target: number |
   const start = Object.freeze([...pegs]);
   return Object.freeze({ board: ownBoard, start, pegs: start, target, history: Object.freeze([]), helped: false });
 }
+/** Lists legal jumps from the current position. */
 export function legalJumps(game: Game): Jump[] {
   return game.board.jumps.filter((j) => game.pegs[j.from] && game.pegs[j.over] && !game.pegs[j.to]);
 }
+/** Counts pegs remaining on the board. */
 export function pegCount(game: Game): number {
   return game.pegs.filter(Boolean).length;
 }
+/** Checks whether one peg remains at the required target, if any. */
 export function isGameSolved(game: Game): boolean {
   return pegCount(game) === 1 && (game.target === null || game.pegs[game.target] === true);
 }
+/** Checks whether no legal continuation remains before the goal is reached. */
 export function isGameStuck(game: Game): boolean {
   return !isGameSolved(game) && legalJumps(game).length === 0;
 }
@@ -44,6 +50,7 @@ export function jumpAt(game: Game, from: number, to: number): Game {
   pegs[jump.to] = true;
   return Object.freeze({ ...game, pegs: Object.freeze(pegs), history: Object.freeze([...game.history, jump]) });
 }
+/** Returns the previous position, or the same game when history is empty. */
 export function undo(game: Game): Game {
   const jump = game.history.at(-1);
   if (!jump) return game;
@@ -53,6 +60,7 @@ export function undo(game: Game): Game {
   pegs[jump.to] = false;
   return Object.freeze({ ...game, pegs: Object.freeze(pegs), history: Object.freeze(game.history.slice(0, -1)) });
 }
+/** Restores the original peg arrangement and clears moves and assistance. */
 export function restart(game: Game): Game {
   return newGame(game.board, game.start, game.target);
 }
@@ -71,6 +79,7 @@ export function gameCode(game: Game): string {
     moves: game.history.map((j) => [j.from, j.to]),
   });
 }
+/** Validates and replays a versioned save string, returning null if invalid. */
 export function gameFromCode(code: string): Game | null {
   try {
     if (code.length > 50000) return null;

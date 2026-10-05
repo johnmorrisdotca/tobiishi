@@ -1,3 +1,4 @@
+/** Localized English and Japanese labels used by the player. */
 export const STRINGS = {
   en: {
     title: "Peg Solitaire",
@@ -44,4 +45,5 @@ export const STRINGS = {
     help: "ヒントには探索回数の上限があります。石が多い盤では少し時間がかかります。",
   },
 } as const;
+/** Supported player interface languages. */
 export type Language = keyof typeof STRINGS;

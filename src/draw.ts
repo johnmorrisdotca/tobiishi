@@ -1,12 +1,17 @@
 import type { Game } from "./game.js";
+/** Built-in board and peg palettes. */
 export type Material = "stone" | "wood" | "glass";
+/** SVG color properties that can be partially overridden by a caller. */
 export type Theme = { board: string; hole: string; peg: string; edge: string; accent: string };
+/** Built-in palette names in player-menu order. */
 export const MATERIALS: readonly Material[] = ["stone", "wood", "glass"];
+/** Palette values used by the SVG renderer. */
 export const THEMES: Record<Material, Theme> = {
   stone: { board: "#f4efe4", hole: "#6b6f68", peg: "#1f2320", edge: "#141614", accent: "#b5452c" },
   wood: { board: "#e2ba7a", hole: "#725640", peg: "#ab633a", edge: "#633b25", accent: "#b5452c" },
   glass: { board: "#fbf8f1", hole: "#6b6f68", peg: "#579caa", edge: "#265865", accent: "#b5452c" },
 };
+/** Maps a board cell index to its SVG centre point. */
 export function pointOf(game: Game, cell: number): { x: number; y: number } {
   const c = game.board.cells[cell]!;
   const xs = game.board.cells.map((p) => (game.board.lattice === "triangle" ? p.x - p.y / 2 : p.x));
@@ -14,12 +19,14 @@ export function pointOf(game: Game, cell: number): { x: number; y: number } {
     minY = Math.min(...game.board.cells.map((p) => p.y));
   return { x: (xs[cell]! - minX) * 60 + 45, y: (c.y - minY) * (game.board.lattice === "triangle" ? 52 : 60) + 45 };
 }
+/** Returns the SVG view box size for the board. */
 export function boundsOf(game: Game): { width: number; height: number } {
   return {
     width: Math.max(...game.board.cells.map((_, i) => pointOf(game, i).x)) + 45,
     height: Math.max(...game.board.cells.map((_, i) => pointOf(game, i).y)) + 45,
   };
 }
+/** Escapes text for safe inclusion in XML attributes and content. */
 export function escapeXml(value: string): string {
   return value.replace(
     /[&<>"']/g,

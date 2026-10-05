@@ -15,6 +15,7 @@ import {
 import { draw, boundsOf, pointOf, MATERIALS, type Material, type Theme } from "./draw.js";
 import { STRINGS, type Language } from "./strings.js";
 import { solve } from "./solve.js";
+/** Initial puzzle, display choices, optional settings host, and persistence callback. */
 export type MountOptions = {
   game?: Game;
   challenge?: Challenge;
@@ -28,6 +29,7 @@ export type MountOptions = {
   settingsHost?: HTMLElement;
   onChange?: (game: Game, code: string) => void;
 };
+/** Controls for reading, replacing, or unmounting one player instance. */
 export type Player = { getGame: () => Game; setGame: (game: Game) => void; destroy: () => void };
 const LABELS: Record<Shape, [string, string]> = {
   english: ["English cross", "イギリス盤"],

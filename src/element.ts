@@ -1,7 +1,7 @@
 import { mount, type Player } from "./mount.js";
 import { SHAPES, type Shape } from "./board.js";
 import { MATERIALS, type Material } from "./draw.js";
-/** Registration is explicit, so importing the engine never needs a DOM. */
+/** Registers a custom element on explicit browser calls; importing this module alone is inert. */
 export function defineTobiishi(tag = "tobiishi-game"): void {
   if (customElements.get(tag)) return;
   class TobiishiElement extends HTMLElement {
