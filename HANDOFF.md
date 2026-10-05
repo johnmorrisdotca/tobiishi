@@ -79,12 +79,7 @@ boolean restore as false; invalid field types are rejected.
 
 ## Remaining release checks
 
-The included four Playwright scenarios are ready for CI. Their native local
-runner could not bind the loopback server from the initial subagent sandbox;
-the parent agent separately encountered macOS browser bootstrap permission
-limits. They have not been reported as passed. The actual UI was exercised in
-the built-in browser instead. Automated 390px mobile fitting is therefore a CI
-check still to run; no physical phone or screen reader certification is claimed.
+All four Playwright scenarios passed in GitHub CI, including the 390px layout check. Local native browser execution was limited by macOS permissions; live browser verification also passed. No physical phone or screen reader certification is claimed.
 
 Use `pnpm install --frozen-lockfile`, `pnpm check`, `pnpm test:package`,
 `pnpm exec playwright install chromium`, `pnpm test:browser`, then repeat the
@@ -93,7 +88,7 @@ and synchronous; generous searches should run in a host-owned worker. Hints
 follow the supplied proof instantly when possible and otherwise search only
 20,000 states. Neither optimal solutions nor unique solutions are claimed.
 
-Do not merge an adapter into Claude's active working directory until coordinated.
+Integrate through the site's normal coordinated release process.
 Publish npm/GitHub and update Itsutsu through the project's usual release flow.
 
 ## Demo family styling
