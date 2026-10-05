@@ -15,7 +15,8 @@ assert.ok(pkg.repository.url.includes(`johnmorrisdotca/${id}`));
 for (const word of ["badge.svg", "licence-MIT", "dependencies-0", "types-TypeScript", `https://johnmorrisdotca.github.io/${id}/api.html`, "CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "docs/desktop.jpg", "docs/phone.jpg"]) assert.ok(text.includes(word), `README missing ${word}`);
 for (const file of ["desktop", "phone"]) assert.ok(statSync(new URL(`../docs/${file}.jpg`, import.meta.url)).size > 10000, `Missing ${file} screenshot`);
 for (const file of ["SECURITY.md", "CODE_OF_CONDUCT.md"]) assert.deepEqual(read(file), read(`scripts/community/${file}`), `${file} differs from the shared copy`);
-assert.equal(createHash("sha256").update(read("scripts/family-template.mjs")).digest("hex"), "38bd7b252045af5bac9ac40b873fdac3d0981ad29a3afc1dff88d5d0df0645b4", "Shared family template drifted");
+// The family template, its hash and its list are held by test/family.test.js; the stylesheet is held here.
+assert.equal(createHash("sha256").update(read("demo/family.css")).digest("hex"), "cde9cd0c66eff59cac663759f110a074dc26a0640fd4d63c7b3cc7667b1346a0", "Shared family stylesheet drifted");
 const entries = apiOf();
 assert.equal(entries.length, Object.keys(pkg.exports).length);
 for (const entry of entries) for (const item of entry.exports) {

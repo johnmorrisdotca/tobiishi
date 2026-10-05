@@ -75,6 +75,7 @@ test("named packs select a fixed goal, show its witness and restore assisted pro
   await page.locator("#goal-hole").selectOption("north");
   await page.getByRole("button", { name: "Play this challenge", exact: true }).click();
   await expect(page.locator("#challenge-status")).toContainText("Long Table");
+  expect(((await page.locator("#challenge-status").textContent()) ?? "").match(/jumps/g)).toHaveLength(1);
   const selected = await page.evaluate(async () => {
     const api = await import("/dist/index.js");
     const challenge = api.generateTobiishiChallenge("wide", "north", "easy");

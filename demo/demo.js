@@ -10,7 +10,7 @@ const WORDS = {
     release: "Open source · @johnmorrisdotca/tobiishi", challengePacks: "Short goal challenges",
     boardPack: "Board pack", difficulty: "Difficulty", goalHole: "Target hole", playGoal: "Play this challenge",
     easy: "Easy · 3 jumps", medium: "Medium · 6 jumps", hard: "Hard · 9 jumps",
-    challengeStarted: "{pack} · {goal} · {difficulty} · {jumps} jumps. A complete answer is built into the hint.",
+    challengeStarted: "{pack} · {goal} · {difficulty}. A complete answer is built into the hint.",
     challengeSaved: "Challenge progress is saved on this device.", freePlay: "Free play. Choose a board below or start a goal challenge.",
   },
   ja: {
@@ -20,7 +20,7 @@ const WORDS = {
     release: "オープンソース · @johnmorrisdotca/tobiishi", challengePacks: "ゴール付きの短い問題",
     boardPack: "盤のパック", difficulty: "難易度", goalHole: "ゴールの穴", playGoal: "この問題を始める",
     easy: "やさしい · 3手", medium: "ふつう · 6手", hard: "むずかしい · 9手",
-    challengeStarted: "{pack} · {goal} · {difficulty} · {jumps}手。ヒントには完成までの手順が入っています。",
+    challengeStarted: "{pack} · {goal} · {difficulty}。ヒントには完成までの手順が入っています。",
     challengeSaved: "問題の進行をこの端末に保存しました。", freePlay: "自由に遊ぶモードです。下から盤を選ぶか、ゴール付きの問題を始めます。",
   },
 };
@@ -109,8 +109,7 @@ function playSelectedChallenge() {
   status.textContent = words.challengeStarted
       .replace("{pack}", TOBIISHI_CHALLENGE_PACKS[challenge.pack].title[languageState.lang])
       .replace("{goal}", challenge.goal.names[languageState.lang])
-      .replace("{difficulty}", words[challenge.difficulty])
-      .replace("{jumps}", String(challenge.answer.length));
+      .replace("{difficulty}", words[challenge.difficulty]);
     show(languageState.lang, challenge.game, challenge);
     const query = new URLSearchParams({
       pack: challenge.pack,

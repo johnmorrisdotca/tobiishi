@@ -2,8 +2,8 @@
 :root{--intro-room:8rem;--intro-room-wide:5rem}
 .layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:24px;align-items:start}
 aside h2,.panel-head h2{font-size:1.05rem;margin:0 0 12px}
-#settings .controls{display:block}#settings label{display:flex;flex-direction:column;gap:6px;font-size:.85rem;margin-bottom:12px;color:var(--muted)}
-#settings select{width:100%;min-width:0}aside p{font-size:.85rem;color:var(--muted);line-height:1.5}
+#settings .controls{display:block}#settings label,.challenge-pack label{display:flex;flex-direction:column;gap:6px;font-size:.85rem;margin-bottom:12px;color:var(--muted)}
+#settings select,.challenge-pack select{width:100%;min-width:0;box-sizing:border-box}.challenge-pack select{border:1px solid var(--rule);border-radius:12px;background:var(--surface);color:var(--ink);padding:8px 12px;min-height:44px}.challenge-pack h3{font-size:.95rem;margin:0 0 10px}.challenge-pack{margin-bottom:16px}.challenge-pack h3,.challenge-pack label,.challenge-pack p{flex:1 1 100%;width:100%;box-sizing:border-box}.challenge-pack .fam-button{width:100%}aside p{font-size:.85rem;color:var(--muted);line-height:1.5}
 .game-screen .tobiishi{max-width:600px;color:var(--felt-ink)}
 .game-screen .tobiishi h2,.game-screen .tobiishi .instructions{display:none}
 .game-screen .tobiishi .board{margin:0}

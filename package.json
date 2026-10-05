@@ -49,7 +49,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "npm run build && node --test test/*.test.mjs",
+    "test": "npm run build && node --test test/*.test.mjs && vitest run",
     "test:browser": "playwright test",
     "check": "npm run typecheck && npm test && pnpm check:presentation",
     "demo": "npm run build && node scripts/site.mjs && node scripts/serve.mjs",
@@ -60,8 +60,9 @@
     "pictures": "pnpm site && node scripts/readme-pictures.mjs"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "typescript": "^5.9.3",
-    "@playwright/test": "^1.58.2"
+    "vitest": "^5.0.3"
   },
   "packageManager": "pnpm@10.11.0",
   "repository": {

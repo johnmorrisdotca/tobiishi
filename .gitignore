@@ -4,5 +4,6 @@ test-results/
 *.tgz
 
 site/
+demo/index.html
 dist/
 .DS_Store

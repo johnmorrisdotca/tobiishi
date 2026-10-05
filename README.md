@@ -56,6 +56,13 @@ centre-vacancy/centre-finish problem is impossible under ordinary orthogonal rul
 A requested challenge length is a maximum; if backward growth stalls, the best
 of 160 deterministic attempts is returned. Inspect `answer.length` for actual length.
 
+## The name
+
+*Tobiishi* (飛び石) is Japanese for stepping stones: the stones set across a garden path or a stream so that you
+cross by stepping from one to the next, read とびいし, said in four beats, *to-bi-i-shi*. It is 飛ぶ (*tobu*, to
+jump) and 石 (*ishi*, stone), which is what you do here, jumping from stone to stone over the one between.
+([Wiktionary: 飛び石](https://en.wiktionary.org/wiki/飛び石).)
+
 ## Install and play
 
 ```sh
@@ -153,6 +160,8 @@ Changing its attributes starts a new player. Each vanilla mount owns its DOM
 and can be cleaned up independently. The core and draw entries do not access
 the DOM, so server rendering and workers can import them safely.
 
+`mount(host, { settingsHost })` optionally places the board and piece settings in a separate host, as the demo does beside its felt panel; the action controls remain with the board.
+
 React and other frameworks can use the vanilla API without an adapter dependency:
 mount into a ref from an effect and return `player.destroy` as cleanup. Keep
 state and language changes explicit through the host or recreate the mount.
@@ -193,8 +202,6 @@ artwork, or level collection from these projects has been copied.
 
 [MIT](LICENSE) · Copyright 2026 John Morris. The original board drawings and interface ship under the same licence.
 
-The demo places labelled board and piece settings beside the felt panel, matching the Jirai and Kazu demos. `mount(host, { settingsHost })` optionally places these settings in a separate host; action controls remain with the board.
-
 ## API reference
 
 The [complete API reference](https://johnmorrisdotca.github.io/tobiishi/api.html) is built from every package entry and its source signatures. The [API guide](docs/API.md) explains the engine, drawing, player and browser tag.
@@ -213,4 +220,32 @@ See [Contributing](CONTRIBUTING.md), the [Code of Conduct](CODE_OF_CONDUCT.md) a
 
 ## The family
 
-Tobiishi is made for [Itsutsu](https://itsutsu.com), alongside [Kyuubu](https://github.com/johnmorrisdotca/kyuubu), [Kazu](https://github.com/johnmorrisdotca/kazu), [Jirai](https://github.com/johnmorrisdotca/jirai) and [Gunjin](https://github.com/johnmorrisdotca/gunjin). Their demos share one stylesheet, header, footer and colour palette.
+<!-- family:start (made by scripts/family-readme.mjs from scripts/family-template.mjs; change those, not this) -->
+Tobiishi is one of twenty-two packages, each made for the same site, each at
+[github.com/johnmorrisdotca](https://github.com/johnmorrisdotca). The code of every one is MIT.
+
+- [Korokoro](https://github.com/johnmorrisdotca/korokoro) (コロコロ): dice, with notation, exact odds, real sounds and the dice of many games. [Demo](https://johnmorrisdotca.github.io/korokoro/).
+- [Kyuubu](https://github.com/johnmorrisdotca/kyuubu) (キューブ): a turning cube for the browser, 2×2 to 7×7, with record solves to replay. [Demo](https://johnmorrisdotca.github.io/kyuubu/).
+- [Hitotsu](https://github.com/johnmorrisdotca/hitotsu) (一つ): a colour-card shedding game for two to eight, with the house rules people play. [Demo](https://johnmorrisdotca.github.io/hitotsu/).
+- [Toranpu](https://github.com/johnmorrisdotca/toranpu) (トランプ): a deck of playing cards, card games with computer players, and solitaires. [Demo](https://johnmorrisdotca.github.io/toranpu/).
+- [Tane](https://github.com/johnmorrisdotca/tane) (種): seeded random numbers and daily seeds, the same in every browser and on every server. [Demo](https://johnmorrisdotca.github.io/tane/).
+- [Narabe](https://github.com/johnmorrisdotca/narabe) (並べ): one rules engine for abstract board games, from gomoku and Reversi to Go and checkers. [Demo](https://johnmorrisdotca.github.io/narabe/).
+- [Tenka](https://github.com/johnmorrisdotca/tenka) (天下): world conquest for two to six, on a map of the real world. [Demo](https://johnmorrisdotca.github.io/tenka/).
+- [Kumimoji](https://github.com/johnmorrisdotca/kumimoji) (組み文字): a crossword tile race, in English and Japanese kana. [Demo](https://johnmorrisdotca.github.io/kumimoji/).
+- [Tsunagi](https://github.com/johnmorrisdotca/tsunagi) (繋ぎ): a line-joining logic puzzle whose every level has exactly one answer. [Demo](https://johnmorrisdotca.github.io/tsunagi/).
+- [Jarajara](https://github.com/johnmorrisdotca/jarajara) (ジャラジャラ): mahjong tiles drawn as SVG, stacked layouts, and the matching solitaire Awase. [Demo](https://johnmorrisdotca.github.io/jarajara/).
+- [Suido](https://github.com/johnmorrisdotca/suido) (水道): a pipe puzzle: turn the pieces until the water reaches every drain. [Demo](https://johnmorrisdotca.github.io/suido/).
+- [Domino](https://github.com/johnmorrisdotca/domino) (ドミノ): dominoes and Mexican Train. [Demo](https://johnmorrisdotca.github.io/domino/).
+- [Kotoba](https://github.com/johnmorrisdotca/kotoba) (言葉): word lists and word-game rules in English, French, German and Japanese. [Demo](https://johnmorrisdotca.github.io/kotoba/).
+- [Sugoroku](https://github.com/johnmorrisdotca/sugoroku) (双六): backgammon and its variants, with the doubling cube and match play. [Demo](https://johnmorrisdotca.github.io/sugoroku/).
+- [Kazu](https://github.com/johnmorrisdotca/kazu) (数): grid number puzzles: Sudoku and its variants, Futoshiki and Skyscrapers. [Demo](https://johnmorrisdotca.github.io/kazu/).
+- [Meikyuu](https://github.com/johnmorrisdotca/meikyuu) (迷宮): mazes on squares, hexagons, triangles and circles, made from a seed and drawn through with a finger or the mouse. [Demo](https://johnmorrisdotca.github.io/meikyuu/).
+- [Hikidashi](https://github.com/johnmorrisdotca/hikidashi) (引き出し): a drawer of small Japanese text tools: era dates, kanji numerals, readings and sentence difficulty. [Demo](https://johnmorrisdotca.github.io/hikidashi/).
+- [Chizu](https://github.com/johnmorrisdotca/chizu) (地図): maps of the world and of countries' regions, in English and Japanese, with a quiz and callouts. [Demo](https://johnmorrisdotca.github.io/chizu/).
+- [Bushu](https://github.com/johnmorrisdotca/bushu) (部首): find a kanji by the parts it is made of. [Demo](https://johnmorrisdotca.github.io/bushu/).
+- [Tobiishi](https://github.com/johnmorrisdotca/tobiishi) (飛び石): peg solitaire with nine boards and seeded solvable challenges. [Demo](https://johnmorrisdotca.github.io/tobiishi/).
+- [Jirai](https://github.com/johnmorrisdotca/jirai) (地雷): minesweeper on shaped grids with verified no-guess boards. [Demo](https://johnmorrisdotca.github.io/jirai/).
+- [Gunjin](https://github.com/johnmorrisdotca/gunjin) (軍人): five hidden-rank strategy games with pass-the-device play. [Demo](https://johnmorrisdotca.github.io/gunjin/).
+
+**This package is Tobiishi.** The demos of all twenty-two share one header and footer, so each links the rest.
+<!-- family:end -->

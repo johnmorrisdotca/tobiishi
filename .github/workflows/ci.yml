@@ -30,7 +30,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
-      - name: The demo, played in Chromium and WebKit at a phone's width and a desk's
+      - name: The demo, played in Chromium
         run: pnpm site && pnpm test:browser
   package:
     runs-on: ${{ matrix.os }}
