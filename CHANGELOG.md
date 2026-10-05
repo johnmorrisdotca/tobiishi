@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.1] - 2026-10-05
+
+- Complete package presentation: desktop and phone screenshots, badges, demo/API links, targeted keywords and linked MIT licence.
+- Source-derived API reference and public API comments, contribution/security files, and a package presentation gate.
+
 ## [0.2.0] - 2026-10-05
 
 - Nine named board packs with three target holes and three short, witnessed challenge lengths per pack: 81 solvable starts.

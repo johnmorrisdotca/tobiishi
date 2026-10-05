@@ -4,20 +4,20 @@ import { TOBIISHI_CHALLENGE_PACKS, generateTobiishiChallenge } from "../dist/ind
 
 const WORDS = {
   en: {
-    settings: "Your board", gameTitle: "Peg Solitaire", instructions: "Jump over a neighbouring peg into an empty hole. Leave one peg at the marked goal.",
+    pageApi: "API reference", settings: "Your board", gameTitle: "Peg Solitaire", instructions: "Jump over a neighbouring peg into an empty hole. Leave one peg at the marked goal.",
     pitch: "Peg solitaire: jump a stone over its neighbour, and leave just one.", name: "Tobiishi means stepping stones.",
     nameLink: "The name", readme: "Readme", foot: "Nine boards · Three stone materials · Keyboard and touch",
-    release: "Local release candidate · @johnmorrisdotca/tobiishi", challengePacks: "Short goal challenges",
+    release: "Open source · @johnmorrisdotca/tobiishi", challengePacks: "Short goal challenges",
     boardPack: "Board pack", difficulty: "Difficulty", goalHole: "Target hole", playGoal: "Play this challenge",
     easy: "Easy · 3 jumps", medium: "Medium · 6 jumps", hard: "Hard · 9 jumps",
     challengeStarted: "{pack} · {goal} · {difficulty} · {jumps} jumps. A complete answer is built into the hint.",
     challengeSaved: "Challenge progress is saved on this device.", freePlay: "Free play. Choose a board below or start a goal challenge.",
   },
   ja: {
-    settings: "盤を選ぶ", gameTitle: "ペグ・ソリティア", instructions: "隣の石を飛び越え、空いた穴へ。目印の穴に石を1つ残します。",
+    pageApi: "APIリファレンス", settings: "盤を選ぶ", gameTitle: "ペグ・ソリティア", instructions: "隣の石を飛び越え、空いた穴へ。目印の穴に石を1つ残します。",
     pitch: "隣の石を飛び越え、最後に石を1つ残すペグ・ソリティア。", name: "飛び石。石から石へ進む名前です。",
     nameLink: "名前について", readme: "説明書", foot: "9種類の盤・3種類の石・キーボードとタッチ操作",
-    release: "ローカル版 · @johnmorrisdotca/tobiishi", challengePacks: "ゴール付きの短い問題",
+    release: "オープンソース · @johnmorrisdotca/tobiishi", challengePacks: "ゴール付きの短い問題",
     boardPack: "盤のパック", difficulty: "難易度", goalHole: "ゴールの穴", playGoal: "この問題を始める",
     easy: "やさしい · 3手", medium: "ふつう · 6手", hard: "むずかしい · 9手",
     challengeStarted: "{pack} · {goal} · {difficulty} · {jumps}手。ヒントには完成までの手順が入っています。",

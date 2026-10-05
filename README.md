@@ -1,4 +1,28 @@
-# Tobiishi · 飛び石
+<h1 align="center">Tobiishi <sub>飛び石</sub></h1>
+
+<p align="center"><strong>Peg solitaire on classic boards and playful shapes.</strong><br>
+Nine outlines, custom rectangles, seeded solvable challenges and accessible English/Japanese play. No runtime dependencies.</p>
+
+<p align="center">
+  <a href="https://github.com/johnmorrisdotca/tobiishi/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/johnmorrisdotca/tobiishi/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://www.npmjs.com/package/@johnmorrisdotca/tobiishi"><img alt="npm" src="https://img.shields.io/npm/v/@johnmorrisdotca/tobiishi?color=2f5d4a"></a>
+  <a href="./LICENSE"><img alt="MIT licence" src="https://img.shields.io/badge/licence-MIT-2f5d4a"></a>
+  <img alt="No runtime dependencies" src="https://img.shields.io/badge/dependencies-0-2f5d4a">
+  <img alt="TypeScript" src="https://img.shields.io/badge/types-TypeScript-3178c6">
+</p>
+
+<p align="center"><a href="https://johnmorrisdotca.github.io/tobiishi/"><strong>Play a board →</strong></a> · <a href="https://johnmorrisdotca.github.io/tobiishi/api.html">API reference</a></p>
+
+<p align="center">
+  <img src="docs/desktop.jpg" alt="English cross peg solitaire on green felt with board and piece settings" width="720">
+  <img src="docs/phone.jpg" alt="A heart board on a phone, with Japanese controls in dark mode" width="220">
+</p>
+
+## Who it is for
+
+- Puzzle sites that need a playable board and an immutable rules engine.
+- Teachers exploring jumps, board geometry and solvability.
+- Players who enjoy classic crosses, triangles, hearts, stars and short goal challenges.
 
 Peg solitaire for JavaScript and TypeScript. Jump one peg over another into an
 empty hole. Remove the jumped peg. Leave one peg in the dotted goal hole.
@@ -33,9 +57,6 @@ A requested challenge length is a maximum; if backward growth stalls, the best
 of 160 deterministic attempts is returned. Inspect `answer.length` for actual length.
 
 ## Install and play
-
-The name is reserved here as a release candidate; it has not been published.
-After publication:
 
 ```sh
 npm install @johnmorrisdotca/tobiishi
@@ -147,10 +168,9 @@ pnpm demo
 npm pack --dry-run
 ```
 
-Demo: http://127.0.0.1:6714. The demo reuses the byte-identical family.css and
+[Public demo](https://johnmorrisdotca.github.io/tobiishi/). Local development uses port 6718. The demo reuses the byte-identical family.css and
 family-template.mjs from the existing packages: shared header, footer, language
-pills, cloth swatches and Help switch. A local adapter names this unpublished
-package and links its local Readme instead of inventing repository or npm URLs.
+pills, cloth swatches and Help switch. The demo links its GitHub repository, npm package and source-derived API reference.
 The stone board uses the family ivory/ink/accent palette and brass frame; wood
 and glass keep their own piece materials. `PORT` can override it. Keyboard: Tab into the board,
 arrow keys move focus through holes in reading order, Enter/Space select, Escape
@@ -169,6 +189,28 @@ solution, also described by [Bell](https://www.gibell.net/pegsolitaire/English/i
 It is checked by replay, not treated as trusted executable code. No implementation,
 artwork, or level collection from these projects has been copied.
 
-MIT · Copyright 2026 John Morris.
+## Licence
+
+[MIT](LICENSE) · Copyright 2026 John Morris. The original board drawings and interface ship under the same licence.
 
 The demo places labelled board and piece settings beside the felt panel, matching the Jirai and Kazu demos. `mount(host, { settingsHost })` optionally places these settings in a separate host; action controls remain with the board.
+
+## API reference
+
+The [complete API reference](https://johnmorrisdotca.github.io/tobiishi/api.html) is built from every package entry and its source signatures. The [API guide](docs/API.md) explains the engine, drawing, player and browser tag.
+
+| Entry | Purpose |
+| --- | --- |
+| `@johnmorrisdotca/tobiishi` | Boards, immutable play, challenges, solving and progress codes |
+| `/draw` | SVG drawing and board geometry |
+| `/play` | Touch, mouse and keyboard player |
+| `/element` | Custom element class and registration function |
+| `/element/define` | Browser-only automatic element registration |
+
+## Contributing and security
+
+See [Contributing](CONTRIBUTING.md), the [Code of Conduct](CODE_OF_CONDUCT.md) and the [Security policy](SECURITY.md).
+
+## The family
+
+Tobiishi is made for [Itsutsu](https://itsutsu.com), alongside [Kyuubu](https://github.com/johnmorrisdotca/kyuubu), [Kazu](https://github.com/johnmorrisdotca/kazu), [Jirai](https://github.com/johnmorrisdotca/jirai) and [Gunjin](https://github.com/johnmorrisdotca/gunjin). Their demos share one stylesheet, header, footer and colour palette.

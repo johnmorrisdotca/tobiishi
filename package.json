@@ -1,6 +1,6 @@
 {
   "name": "@johnmorrisdotca/tobiishi",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Peg solitaire on nine classic, shaped, wide and tall boards. Immutable engine, seeded solvable challenges, configurable materials, SVG drawing and accessible English/Japanese play. Zero runtime dependencies.",
   "type": "module",
   "author": "John Morris",
@@ -51,11 +51,13 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "npm run build && node --test test/*.test.mjs",
     "test:browser": "playwright test",
-    "check": "npm run typecheck && npm test",
+    "check": "npm run typecheck && npm test && pnpm check:presentation",
     "demo": "npm run build && node scripts/site.mjs && node scripts/serve.mjs",
     "prepublishOnly": "npm run check",
     "test:package": "npm run build && node scripts/check-package.mjs",
-    "site": "npm run build && node scripts/site.mjs"
+    "site": "npm run build && node scripts/site.mjs",
+    "check:presentation": "node scripts/check-presentation.mjs",
+    "pictures": "pnpm site && node scripts/readme-pictures.mjs"
   },
   "devDependencies": {
     "typescript": "^5.9.3",
@@ -72,5 +74,33 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "keywords": [
+    "peg-solitaire",
+    "solitaire",
+    "board-game",
+    "puzzle",
+    "logic-puzzle",
+    "english-solitaire",
+    "triangle-solitaire",
+    "peg-game",
+    "jumping-puzzle",
+    "heart-board",
+    "star-board",
+    "hexagonal-board",
+    "custom-board",
+    "seeded",
+    "puzzle-generator",
+    "solvable",
+    "svg",
+    "typescript",
+    "javascript",
+    "zero-dependencies",
+    "accessible",
+    "touch",
+    "keyboard",
+    "web-component",
+    "japanese",
+    "itsutsu"
+  ]
 }
