@@ -18,12 +18,6 @@ Nine outlines, custom rectangles, seeded solvable challenges and accessible Engl
   <img src="docs/phone.jpg" alt="A heart board on a phone, with Japanese controls in dark mode" width="220">
 </p>
 
-## Who it is for
-
-- Puzzle sites that need a playable board and an immutable rules engine.
-- Teachers exploring jumps, board geometry and solvability.
-- Players who enjoy classic crosses, triangles, hearts, stars and short goal challenges.
-
 Peg solitaire for JavaScript and TypeScript. Jump one peg over another into an
 empty hole. Remove the jumped peg. Leave one peg in the dotted goal hole.
 
@@ -31,6 +25,50 @@ A pure immutable engine, custom boards, SVG drawing, and English/Japanese play.
 Zero runtime dependencies. Node 22+ for development; modern browsers for play.
 The Japanese name means stepping stones; it is a project name rather than a
 claim about the game's historical Japanese name.
+
+## In 30 seconds
+
+```sh
+npm install @johnmorrisdotca/tobiishi
+```
+
+```ts
+import { mount } from "@johnmorrisdotca/tobiishi/play";
+
+const player = mount(document.querySelector("#game")!, { shape: "english", language: "en", material: "stone" });
+```
+
+Or in a page, with nothing else to set up:
+
+```html
+<script type="module" src="https://cdn.jsdelivr.net/npm/@johnmorrisdotca/tobiishi@0/dist/element-define.js"></script>
+<tobiishi-game shape="triangle" seed="today" language="ja"></tobiishi-game>
+```
+
+The rules need no page at all:
+
+```ts
+import { classicEnglish, jumpAt, legalJumps } from "@johnmorrisdotca/tobiishi";
+
+let game = classicEnglish().game;
+const jump = legalJumps(game)[0]!;
+game = jumpAt(game, jump.from, jump.to);   // a new game; the old one is untouched
+```
+
+## Who it is for
+
+- Puzzle sites that need a playable board and an immutable rules engine.
+- Teachers exploring jumps, board geometry and solvability.
+- Players who enjoy classic crosses, triangles, hearts, stars and short goal challenges.
+
+## Features
+
+- **Nine boards**, from the English cross and the triangle to a heart, a star and a hexagon, and any rectangle you ask for, each with its jumps, undo and a saved-game code.
+- **Seeded challenges that can be solved**, grown backward from one peg, each carrying an answer that is replayed; and nine named packs of short goal challenges, 81 in all.
+- **A bounded solver**, hints along a proved answer, and a `helped` mark so a host can score assisted play apart.
+- **SVG drawing** in three materials (`stone`, `wood`, `glass`), and a player for touch, mouse and keyboard, in English and Japanese.
+- **A pure, immutable engine** and a custom element, with no DOM in the core, so servers and workers can import it.
+- **Zero runtime dependencies.**
 
 ## Boards
 
@@ -56,18 +94,7 @@ centre-vacancy/centre-finish problem is impossible under ordinary orthogonal rul
 A requested challenge length is a maximum; if backward growth stalls, the best
 of 160 deterministic attempts is returned. Inspect `answer.length` for actual length.
 
-## The name
-
-*Tobiishi* (飛び石) is Japanese for stepping stones: the stones set across a garden path or a stream so that you
-cross by stepping from one to the next, read とびいし, said in four beats, *to-bi-i-shi*. It is 飛ぶ (*tobu*, to
-jump) and 石 (*ishi*, stone), which is what you do here, jumping from stone to stone over the one between.
-([Wiktionary: 飛び石](https://en.wiktionary.org/wiki/飛び石).)
-
-## Install and play
-
-```sh
-npm install @johnmorrisdotca/tobiishi
-```
+## Use it in your project
 
 ```ts
 import { mount } from '@johnmorrisdotca/tobiishi/play';
@@ -107,7 +134,7 @@ const challenge = generateTobiishiChallenge('wide', 'north', 'medium');
 The pack definitions are in `src/challenges.ts`; tests replay every witness and
 check that its final peg occupies the selected hole.
 
-## Engine
+### The engine
 
 ```ts
 import { classicEnglish, jumpAt, legalJumps, undo,
@@ -140,7 +167,7 @@ proved hints can call `markHelped(game)` and `player.setGame` explicitly.
 should be solved in a worker for generous budgets. `limit` is not an assertion
 that a position is impossible. No optimality or unique-solution claim is made.
 
-## Draw and custom element
+### Draw and custom element
 
 ```ts
 import { draw } from '@johnmorrisdotca/tobiishi/draw';
@@ -166,27 +193,70 @@ React and other frameworks can use the vanilla API without an adapter dependency
 mount into a ref from an effect and return `player.destroy` as cleanup. Keep
 state and language changes explicit through the host or recreate the mount.
 
-## Development
+## API
 
-```sh
-pnpm install --frozen-lockfile
-pnpm check
-pnpm exec playwright install chromium
-pnpm test:browser
-pnpm demo
-npm pack --dry-run
+Every export of every entry point is in the [complete API reference](https://johnmorrisdotca.github.io/tobiishi/api.html), built from the source signatures. The [API guide](docs/API.md) explains the engine, drawing, player and browser tag.
+
+| Entry | Purpose |
+| --- | --- |
+| `@johnmorrisdotca/tobiishi` | Boards, immutable play, challenges, solving and progress codes |
+| `/draw` | SVG drawing and board geometry |
+| `/play` | Touch, mouse and keyboard player |
+| `/element` | Custom element class and registration function |
+| `/element/define` | Browser-only automatic element registration |
+
+## Theming
+
+`material` is `stone`, `wood` or `glass`, and a partial `theme` (`board`, `hole`, `peg`, `edge`, `accent`) overrides any of its colours. The player's own controls read the page's custom properties `--ink`, `--surface`, `--rule`, `--accent` and `--font`, with the family's colours as the fallback, so one line of CSS on a parent restyles them. The stone board uses the family's ivory, ink and accent palette and a brass frame; wood and glass keep their own piece materials.
+
+## Limits
+
+- A rectangle has at least 3 holes per side, at most 32 per side and 128 holes overall.
+- `solve` is synchronous and bounded: it answers `solved`, `impossible` or `limit`, and `limit` is not an assertion that a position is impossible. Solve large positions in a worker.
+- No optimality or unique-solution claim is made, and a saved game does not authenticate a score: it is not an anti-cheat protocol.
+- Apart from the two classic starts (the English cross and the triangle), a game begins from a generated partial position grown backward from one peg, and a requested challenge length is a maximum: inspect `answer.length` for the actual length.
+
+## Browser support
+
+Any current browser with SVG, ES modules and custom elements: Chrome, Edge, Firefox and Safari, on a phone or a desk. The demo's browser tests run in Chromium. The core and draw entries need no DOM, and development needs Node 22 or later.
+
+## Languages
+
+The player's words are English and Japanese, chosen with the `language` option or attribute. Corrections to the Japanese are welcome as issues.
+
+## Roadmap
+
+The engine, the nine boards, the packs and the player are in. Nothing else is promised for a date; ideas are welcome in the [issues](https://github.com/johnmorrisdotca/tobiishi/issues).
+
+## Architecture
+
+```text
+src/
+├── board.ts
+├── challenges.ts
+├── draw-entry.ts
+├── draw.ts
+├── element-define.ts
+├── element.ts
+├── game.ts
+├── generate.ts
+├── index.ts
+├── mount.ts
+├── play-entry.ts
+├── solve.ts
+└── strings.ts
 ```
 
-[Public demo](https://johnmorrisdotca.github.io/tobiishi/). Local development uses port 6718. The demo reuses the byte-identical family.css and
-family-template.mjs from the existing packages: shared header, footer, language
-pills, cloth swatches and Help switch. The demo links its GitHub repository, npm package and source-derived API reference.
-The stone board uses the family ivory/ink/accent palette and brass frame; wood
-and glass keep their own piece materials. `PORT` can override it. Keyboard: Tab into the board,
-arrow keys move focus through holes in reading order, Enter/Space select, Escape
-clears selection. Empty destinations for the selected peg are outlined. Mouse
-and touch share the same controls; the interface has no drag requirement.
+## The name
 
-## Design references
+*Tobiishi* (飛び石) is Japanese for stepping stones: the stones set across a garden path or a stream so that you
+cross by stepping from one to the next, read とびいし, said in four beats, *to-bi-i-shi*. It is 飛ぶ (*tobu*, to
+jump) and 石 (*ishi*, stone), which is what you do here, jumping from stone to stone over the one between.
+([Wiktionary: 飛び石](https://en.wiktionary.org/wiki/飛び石).)
+
+## Where it comes from
+
+Peg solitaire is an old game whose rules are common property, and every board, drawing, challenge and word here is the package's own.
 
 [Simon Tatham's Pegs](https://www.chiark.greenend.org.uk/~sgtatham/puzzles/doc/pegs.html)
 provides a useful benchmark for configurable boards and guaranteed solvability.
@@ -198,30 +268,10 @@ solution, also described by [Bell](https://www.gibell.net/pegsolitaire/English/i
 It is checked by replay, not treated as trusted executable code. No implementation,
 artwork, or level collection from these projects has been copied.
 
-## Licence
-
-[MIT](LICENSE) · Copyright 2026 John Morris. The original board drawings and interface ship under the same licence.
-
-## API reference
-
-The [complete API reference](https://johnmorrisdotca.github.io/tobiishi/api.html) is built from every package entry and its source signatures. The [API guide](docs/API.md) explains the engine, drawing, player and browser tag.
-
-| Entry | Purpose |
-| --- | --- |
-| `@johnmorrisdotca/tobiishi` | Boards, immutable play, challenges, solving and progress codes |
-| `/draw` | SVG drawing and board geometry |
-| `/play` | Touch, mouse and keyboard player |
-| `/element` | Custom element class and registration function |
-| `/element/define` | Browser-only automatic element registration |
-
-## Contributing and security
-
-See [Contributing](CONTRIBUTING.md), the [Code of Conduct](CODE_OF_CONDUCT.md) and the [Security policy](SECURITY.md).
-
-## The family
+### The family
 
 <!-- family:start (made by scripts/family-readme.mjs from scripts/family-template.mjs; change those, not this) -->
-Tobiishi is one of twenty-two packages, each made for the same site, each at
+Tobiishi is one of twenty-four packages, each made for the same site, each at
 [github.com/johnmorrisdotca](https://github.com/johnmorrisdotca). The code of every one is MIT.
 
 - [Korokoro](https://github.com/johnmorrisdotca/korokoro) (コロコロ): dice, with notation, exact odds, real sounds and the dice of many games. [Demo](https://johnmorrisdotca.github.io/korokoro/).
@@ -246,6 +296,37 @@ Tobiishi is one of twenty-two packages, each made for the same site, each at
 - [Tobiishi](https://github.com/johnmorrisdotca/tobiishi) (飛び石): peg solitaire with nine boards and seeded solvable challenges. [Demo](https://johnmorrisdotca.github.io/tobiishi/).
 - [Jirai](https://github.com/johnmorrisdotca/jirai) (地雷): minesweeper on shaped grids with verified no-guess boards. [Demo](https://johnmorrisdotca.github.io/jirai/).
 - [Gunjin](https://github.com/johnmorrisdotca/gunjin) (軍人): five hidden-rank strategy games with pass-the-device play. [Demo](https://johnmorrisdotca.github.io/gunjin/).
+- [Karakuri](https://github.com/johnmorrisdotca/karakuri) (からくり): eight hyper-casual puzzle games, some of them physics: draw a shield, pull pins, cut ropes, slide blocks, pour tubes. [Demo](https://johnmorrisdotca.github.io/karakuri/).
+- [Houseki](https://github.com/johnmorrisdotca/houseki) (宝石): gem and stone matching puzzles: falling triplets, stone collapse, colour chains and gem swap. [Demo](https://johnmorrisdotca.github.io/houseki/).
 
-**This package is Tobiishi.** The demos of all twenty-two share one header and footer, so each links the rest.
+**This package is Tobiishi.** The demos of all twenty-four share one header and footer, so each links the rest.
 <!-- family:end -->
+
+## Development
+
+```sh
+pnpm install --frozen-lockfile
+pnpm check          # lint, types, tests and the presentation checks
+pnpm test:package   # build, pack as npm does, install and import every entry
+pnpm test:demo      # build the demo and drive it in a real browser
+pnpm demo           # serve the demo on port 6718 (PORT overrides it)
+```
+
+[Public demo](https://johnmorrisdotca.github.io/tobiishi/). The demo reuses the byte-identical `family.css` and
+`family-template.mjs` of the family: shared header, footer, language
+pills, cloth swatches and Help switch, and it links the repository, the npm package and the source-derived API reference.
+Keyboard: Tab into the board, arrow keys move focus through holes in reading order, Enter and Space select, Escape
+clears the selection. Empty destinations for the selected peg are outlined. Mouse
+and touch share the same controls; the interface has no drag requirement.
+
+## Contributing
+
+Bug reports and pull requests are welcome in the [issues](https://github.com/johnmorrisdotca/tobiishi/issues). See [CONTRIBUTING.md](CONTRIBUTING.md), the [Code of Conduct](CODE_OF_CONDUCT.md) and the [Security policy](SECURITY.md).
+
+## Changes
+
+Every release is written up in [CHANGELOG.md](./CHANGELOG.md).
+
+## Licence
+
+[MIT](LICENSE) · Copyright 2026 John Morris. The original board drawings and interface ship under the same licence.
