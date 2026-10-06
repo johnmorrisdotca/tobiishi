@@ -6,8 +6,15 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+## [0.2.3] - 2026-10-06
+
+Nothing that was exported has changed.
+
 ### Changed
 
+- The README takes the family's one layout, fully: a hero picture of the demo on a desk and on a phone in light and dark, a picture of every board and of the selected peg, the three materials and the short goal challenges, an Examples section of thirteen runnable examples, an Accessibility section, and the API summary with a link to the guide. Its pictures are in `docs/images` (WebP, light and dark) and are retaken with `pnpm screenshots:readme`; they are not in the tarball, and `pnpm test:package` fails if one is.
+- `pnpm test:readme` type-checks and runs every TypeScript and JavaScript example in the README against the built package, as a CI job of its own, and `pnpm check` holds the README to the family's lint (sections in order, a language on every fence, pictures with alt text, widths and captions, no marketing words).
+- The README said the element could be given `seed="today"`. The package never reads the date: a challenge of the day is `seed="2026-10-06"`, written by the page. The README now says so.
 - Repository only: the package and everything it exports are unchanged. `CONTRIBUTING.md` is the family's one text with a section of its own for Tobiishi, held to the master in johnmorrisdotca/.github by `test/family.test.js`; `ci.yml` and `pages.yml` are the family's one text (`pnpm check`, the demo, and the package on Linux, macOS and Windows), and any jobs of the package's own after them.
 - The demo's page titles read `Tobiishi · pitch`, like the rest of the family's.
 

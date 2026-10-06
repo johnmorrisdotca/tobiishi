@@ -12,8 +12,8 @@ assert.ok(read("LICENSE").toString().includes("MIT License"));
 assert.ok(!Object.keys(pkg.dependencies ?? {}).length);
 assert.ok(pkg.keywords.length >= 15);
 assert.ok(pkg.repository.url.includes(`johnmorrisdotca/${id}`));
-for (const word of ["badge.svg", "licence-MIT", "dependencies-0", "types-TypeScript", `https://johnmorrisdotca.github.io/${id}/api.html`, "CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "docs/desktop.jpg", "docs/phone.jpg"]) assert.ok(text.includes(word), `README missing ${word}`);
-for (const file of ["desktop", "phone"]) assert.ok(statSync(new URL(`../docs/${file}.jpg`, import.meta.url)).size > 10000, `Missing ${file} screenshot`);
+for (const word of ["badge.svg", "licence-MIT", "dependencies-0", "types-TypeScript", `https://johnmorrisdotca.github.io/${id}/api.html`, "CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "docs/images/hero-desk-light.webp"]) assert.ok(text.includes(word), `README missing ${word}`);
+for (const file of ["hero-desk-light", "hero-phone-light"]) assert.ok(statSync(new URL(`../docs/images/${file}.webp`, import.meta.url)).size > 10000, `Missing ${file} screenshot`);
 for (const file of ["SECURITY.md", "CODE_OF_CONDUCT.md"]) assert.deepEqual(read(file), read(`scripts/community/${file}`), `${file} differs from the shared copy`);
 // The family template, its hash and its list are held by test/family.test.js; the stylesheet is held here.
 assert.equal(createHash("sha256").update(read("demo/family.css")).digest("hex"), "cde9cd0c66eff59cac663759f110a074dc26a0640fd4d63c7b3cc7667b1346a0", "Shared family stylesheet drifted");

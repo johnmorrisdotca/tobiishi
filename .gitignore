@@ -7,3 +7,4 @@ site/
 demo/index.html
 dist/
 .DS_Store
+.readme-examples/

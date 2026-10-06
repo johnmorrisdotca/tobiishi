@@ -1,6 +1,6 @@
 {
   "name": "@johnmorrisdotca/tobiishi",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Peg solitaire on nine classic, shaped, wide and tall boards. Immutable engine, seeded solvable challenges, configurable materials, SVG drawing and accessible English/Japanese play. Zero runtime dependencies.",
   "type": "module",
   "author": "John Morris",
@@ -59,8 +59,9 @@
     "test:package": "pnpm build && node scripts/check-package.mjs",
     "site": "pnpm build && node scripts/site.mjs",
     "check:presentation": "node scripts/check-presentation.mjs",
-    "pictures": "pnpm site && node scripts/readme-pictures.mjs",
-    "family:readme": "node scripts/family-readme.mjs"
+    "family:readme": "node scripts/family-readme.mjs",
+    "screenshots:readme": "pnpm site && node scripts/readme-pictures.mjs",
+    "test:readme": "pnpm build && node scripts/check-readme-examples.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",

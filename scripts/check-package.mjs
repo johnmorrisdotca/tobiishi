@@ -11,6 +11,9 @@ const run = (args, cwd) => execFileSync("npm", args, { cwd, encoding: "utf8", sh
 try {
   const packed = JSON.parse(run(["pack", "--json", "--ignore-scripts", "--pack-destination", scratch], process.cwd()))[0];
   const files = new Set(packed.files.map(file => file.path));
+  // The README's pictures are in docs/images, for GitHub and npm to show by address, and are never in what is installed.
+  const shipped = [...files].filter(file => file.startsWith("docs/") || /\.(webp|png|jpe?g|gif)$/.test(file));
+  assert.deepEqual(shipped, [], `The tarball holds pictures or docs: ${shipped.join(", ")}`);
   for (const target of Object.values(pkg.exports)) for (const path of Object.values(target)) assert.ok(files.has(path.replace(/^\.\//, "")), `Archive missing ${path}`);
   assert.equal(Object.keys(pkg.dependencies ?? {}).length, 0);
   writeFileSync(join(scratch, "package.json"), '{"type":"module","private":true}');

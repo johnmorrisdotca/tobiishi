@@ -1,52 +1,76 @@
-// Captures the README's real desktop and phone games from the built demo.
-import { existsSync, readFileSync, mkdirSync } from "node:fs";
-import { dirname, join, extname } from "node:path";
-import { fileURLToPath } from "node:url";
-import { chromium } from "@playwright/test";
-const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const id = JSON.parse(readFileSync(join(root, "package.json"), "utf8")).name.split("/")[1];
-const site = join(root, id === "jirai" ? "docs" : "site");
-const docs = join(root, "docs");
-mkdirSync(docs, { recursive: true });
-const host = `http://${id}.test`;
-const types = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".json": "application/json" };
-const browser = await chromium.launch();
-for (const phone of [false, true]) {
-  const context = await browser.newContext({ viewport: { width: phone ? 390 : 1280, height: phone ? 844 : 900 }, colorScheme: phone ? "dark" : "light", reducedMotion: "reduce", deviceScaleFactor: 2 });
-  const page = await context.newPage();
-  await page.route(`${host}/**`, route => {
-    const pathname = new URL(route.request().url()).pathname;
-    const file = join(site, pathname === "/" ? "index.html" : pathname.slice(1));
-    return existsSync(file) ? route.fulfill({ body: readFileSync(file), contentType: types[extname(file)] ?? "application/octet-stream" }) : route.fulfill({ status: 404 });
-  });
-  await page.goto(`${host}/?lang=en&seed=7&noGuess=0`);
-  if (id === "gunjin") {
-    const size = phone ? 7 : 9;
-    if (phone) { await page.locator("#size").selectOption("7"); await page.getByRole("button", { name: "New game", exact: true }).click(); }
-    for (let i = 0; i < size; i++) await page.locator(`.gj-cell[data-cell="${size * (size - 1) + i}"]`).click();
-    await page.getByRole("button", { name: "Finish setup", exact: true }).click();
-    await page.getByRole("button", { name: "Pass device", exact: true }).click();
-    for (let i = 0; i < size; i++) await page.locator(`.gj-cell[data-cell="${i}"]`).click();
-    await page.getByRole("button", { name: "Finish setup", exact: true }).click();
-    await page.getByRole("button", { name: "Pass device", exact: true }).click();
-  } else if (id === "jirai") {
-    await page.locator('[data-cell="40"]').click();
-    await page.locator('[data-cell="40"][data-kind="open"]').waitFor();
-  } else {
-    if (phone) await page.getByLabel("Board", { exact: true }).selectOption("heart");
-    else {
-      const move = await page.evaluate(async () => (await import("/dist/index.js")).classicEnglish().answer[0]);
-      await page.locator(`.cell[data-cell="${move.from}"]`).click();
-      await page.locator(`.cell[data-cell="${move.to}"]`).click();
-    }
-  }
-  if (phone) {
-    await page.getByRole("button", { name: "日本語", exact: true }).click();
-    await page.locator(id === "gunjin" ? "#player" : "#game").scrollIntoViewIfNeeded();
-  }
-  if (!phone) await page.evaluate(() => window.scrollTo(0, 0));
-  await page.screenshot({ fullPage: !phone, path: join(docs, phone ? "phone.jpg" : "desktop.jpg"), type: "jpeg", quality: 82 });
-  await context.close();
-}
-await browser.close();
-console.log("README desktop and phone screenshots saved.");
+// Takes the pictures the README shows, from the built demo in `site/`: `pnpm screenshots:readme` (builds the demo, then runs this).
+// The family's standard is in johnmorrisdotca/.github (README-STANDARD.md); the shared part is readme-pictures-lib.mjs.
+// The page is served to a browser without a port and never fetched from the live site. Every board is the one the demo opens
+// on when it is chosen from the board menu, whose challenges are seeded, so two runs give the same pictures.
+// Output: docs/images/<subject>-<desk|phone>-<light|dark>.webp.
+import { takePictures } from "./readme-pictures-lib.mjs";
+
+const BOARD = ".tobiishi .board";
+
+/** Choose a board in the demo's board menu and wait for it to be drawn. */
+const choose = (shape, material) => async (page) => {
+  await page.locator('[data-action="shape"]').selectOption(shape);
+  if (material) await page.locator('[data-action="material"]').selectOption(material);
+  await page.waitForSelector(`${BOARD} svg`);
+};
+
+/** One board, cropped to the board. */
+const board = (subject, shape, material) => ({ subject, views: ["desk"], scale: 2, ready: `${BOARD} svg`, target: BOARD, prepare: choose(shape, material) });
+
+await takePictures({
+  shots: [
+    // The page from the top, on a desk: the English cross after its first jump. On a phone, in Japanese, the heart board.
+    {
+      subject: "hero",
+      views: ["desk", "phone"],
+      height: 1100,
+      ready: `${BOARD} svg`,
+      async prepare(page, { view }) {
+        if (view === "phone") {
+          await page.getByRole("button", { name: "日本語", exact: true }).click();
+          await choose("heart")(page);
+          await page.locator(".game-screen").evaluate((element) => window.scrollTo(0, element.getBoundingClientRect().top + window.scrollY - 8));
+        } else {
+          const move = await page.evaluate(async () => (await import("/dist/index.js")).classicEnglish().answer[0]);
+          await page.locator(`.cell[data-cell="${move.from}"]`).click();
+          await page.locator(`.cell[data-cell="${move.to}"]`).click();
+          await page.evaluate(() => window.scrollTo(0, 0));
+        }
+      },
+    },
+    board("english", "english"),
+    board("triangle", "triangle"),
+    board("european", "european"),
+    board("diamond", "diamond"),
+    board("heart", "heart"),
+    board("star", "star"),
+    board("hexagon", "hexagon"),
+    board("wide", "wide"),
+    board("tall", "tall"),
+    // The three materials, on the same hexagon.
+    board("wood", "hexagon", "wood"),
+    board("glass", "hexagon", "glass"),
+    // A short goal challenge: the pack, the goal and the difficulty chosen, then played.
+    {
+      subject: "challenge",
+      views: ["desk"],
+      url: "/?lang=en&pack=heart&goal=north&difficulty=medium",
+      ready: `${BOARD} svg`,
+      target: ".layout",
+    },
+    // A selected peg: its empty destinations are outlined.
+    {
+      subject: "selected-peg",
+      views: ["desk"],
+      scale: 2,
+      ready: `${BOARD} svg`,
+      target: BOARD,
+      async prepare(page) {
+        await choose("english")(page);
+        const move = await page.evaluate(async () => (await import("/dist/index.js")).classicEnglish().answer[0]);
+        await page.locator(`.cell[data-cell="${move.from}"]`).click();
+        await page.locator(".cell.legal").first().waitFor();
+      },
+    },
+  ],
+});
