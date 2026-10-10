@@ -1,8 +1,8 @@
 // Builds the demo for GitHub Pages into ./site: the page, written here from the family's shared head, header and
 // footer, with the family's stylesheet, Tobiishi's own, the page's script and the compiled library beside it.
 // The same page is written to demo/index.html (not tracked) for `pnpm demo`, which serves the repository root.
-import { writeFile, mkdir, cp } from "node:fs/promises";
-import { FAMILY_SCRIPT, familyHead, familyHeader, familyFooter, familyUnreviewed } from "./family-template.mjs";
+import { writeFile, readFile, mkdir, cp } from "node:fs/promises";
+import { FAMILY_SCRIPT, FAMILY_EMBED_BUILDER_WORDS, familyEmbedBuilder, familyHead, familyHeader, familyFooter, familyUnreviewed } from "./family-template.mjs";
 import { API_CSS, apiPage } from "./api.mjs";
 
 const id = "tobiishi";
@@ -25,3 +25,9 @@ await writeFile("site/index.html", page);
 await cp("demo/family.css", "site/family.css");
 await writeFile("site/api.css", API_CSS);
 await writeFile("site/api.html", apiPage({ id, name: "Tobiishi", icon }));
+
+await writeFile("site/family-embed-builder.js", `export const FAMILY_EMBED_BUILDER_WORDS = ${JSON.stringify(FAMILY_EMBED_BUILDER_WORDS)};\nexport ${familyEmbedBuilder.toString()};\n`);
+const builderParts = { builderHead: familyHead({ id, title: "Tobiishi · build a peg-solitaire embed", description: "Choose a peg-solitaire board, seed and look, preview it and copy the embed code." }), builderHeader: familyHeader({ id, links: [{ href: "./", say: "toGallery" }] }), unreviewed: familyUnreviewed({ id }), footer: familyFooter({ id }), script: `<script>${FAMILY_SCRIPT}</script>` };
+await writeFile("site/builder.html", (await readFile("demo/builder.html", "utf8")).replace(/<!-- family:([A-Za-z]+) -->/g, (_match, key) => builderParts[key]));
+await cp("demo/embed", "site/embed", { recursive: true });
+for (const file of ["builder.js", "builder.css"]) await cp(`demo/${file}`, `site/${file}`);

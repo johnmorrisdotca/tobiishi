@@ -29,8 +29,16 @@ export type MountOptions = {
   settingsHost?: HTMLElement;
   onChange?: (game: Game, code: string) => void;
 };
-/** Controls for reading, replacing, or unmounting one player instance. */
-export type Player = { getGame: () => Game; setGame: (game: Game) => void; destroy: () => void };
+/**
+ * Controls for reading, replacing, updating presentation or unmounting one player instance.
+ * @example
+ * ```ts
+ * import type { Player } from "@johnmorrisdotca/tobiishi/play";
+ * const setJapanese = (player: Player): void => player.set({ language: "ja" });
+ * console.log(typeof setJapanese);
+ * ```
+ */
+export type Player = { getGame: () => Game; setGame: (game: Game) => void; set: (changes: Pick<MountOptions, "language" | "material" | "theme" | "justBoard">) => void; destroy: () => void };
 const LABELS: Record<Shape, [string, string]> = {
   english: ["English cross", "イギリス盤"],
   triangle: ["Triangle", "三角盤"],
@@ -80,13 +88,28 @@ const SHAPE_NOTES: Record<Shape, [string, string]> = {
     "5 × 9の縦長盤。縦横に飛び越え、目印の穴に石を1つ残します。",
   ],
 };
-/** Mount one independent player. The host owns persistence through onChange and setGame. */
+/**
+ * Mount one independent player. The host owns persistence through onChange and setGame.
+ * @param host - The element that owns this player and its controls.
+ * @param options - Initial puzzle, presentation and persistence callback.
+ * @returns A player with game access, replacement, presentation updates and cleanup.
+ * @example
+ * ```ts
+ * import { mount } from "@johnmorrisdotca/tobiishi/play";
+ * if (typeof document !== "undefined") {
+ *   const player = mount(document.createElement("div"));
+ *   player.set({ material: "wood", language: "ja" });
+ *   player.destroy();
+ * }
+ * console.log(typeof mount);
+ * ```
+ */
 export function mount(host: HTMLElement, options: MountOptions = {}): Player {
   let shape =
       options.shape ??
       (SHAPES.includes(options.game?.board.name as Shape) ? (options.game!.board.name as Shape) : "english"),
     material = options.material ?? "stone";
-  const lang = options.language ?? "en",
+  let lang = options.language ?? "en",
     text = STRINGS[lang];
   let challenge =
     options.challenge ??
@@ -360,6 +383,7 @@ export function mount(host: HTMLElement, options: MountOptions = {}): Player {
       announce(next);
       render();
     },
+    set: (changes) => { options = { ...options, ...changes }; material = changes.material ?? material; lang = changes.language ?? lang; text = STRINGS[lang]; render(); },
     destroy: () => {
       destroyed = true;
       options.settingsHost?.replaceChildren();

@@ -1,2 +1,3 @@
-import {defineConfig} from '@playwright/test';
-export default defineConfig({testDir:'test/browser',use:{baseURL:'http://127.0.0.1:6718',headless:true},webServer:{command:'pnpm demo',url:'http://127.0.0.1:6718',reuseExistingServer:false,env:{PORT:'6718'}}});
+import { defineConfig, devices } from "@playwright/test";
+const port = process.env.TEST_PORT ?? "6901";
+export default defineConfig({ testDir: "test/browser", use: { baseURL: `http://127.0.0.1:${port}`, headless: true }, projects: [{ name: "chromium-desk", use: { ...devices["Desktop Chrome"] } }, { name: "chromium-phone", use: { ...devices["Desktop Chrome"], viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true } }, { name: "webkit-phone", use: { ...devices["Desktop Safari"], viewport: { width: 390, height: 844 }, hasTouch: true } }], webServer: { command: "pnpm demo", url: `http://127.0.0.1:${port}`, reuseExistingServer: false, env: { PORT: port } } });

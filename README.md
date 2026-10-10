@@ -240,7 +240,7 @@ console.log(gameFromCode(gameCode(played))?.history.length);   // 31: a save is 
 
 ### 3. A bundler, and a framework
 
-`import "@johnmorrisdotca/tobiishi/element/define"` once, in code that runs in the browser, and `<tobiishi-game>` is a tag like any other. It draws in the page's own DOM, so the page's CSS reaches it. It speaks through one DOM event, `tobiishi-change`, whose `detail` is the new immutable game.
+`import "@johnmorrisdotca/tobiishi/element/define"` once, in code that runs in the browser, and `<tobiishi-game>` is a tag like any other. It draws in the page's own DOM, so the page's CSS reaches it. Moves keep the `tobiishi-change` event and its game-shaped detail, now a JSON-safe snapshot that bubbles across shadow roots. `tobiishi-load` reports startup and `tobiishi-error` shows input errors. The define entry can also be imported safely on a server, where it registers nothing.
 
 ```jsx
 // React 19
@@ -323,6 +323,12 @@ mode retains the board and live status; host controls can call `setGame` with
 React and other frameworks can use the vanilla API without an adapter dependency:
 mount into a ref from an effect and return `player.destroy` as cleanup. Keep
 state and language changes explicit through the host or recreate the mount.
+
+#### Embed builder and reflected settings
+
+[Build a peg-solitaire embed](https://johnmorrisdotca.github.io/tobiishi/builder.html), preview the board and copy element, iframe, module, React 19, Vue, Svelte, Angular, HTML or URL code. It reads no storage. New `size` is small/medium/large (320/480/640px), with optional pixel `width`, auto/light/dark `theme`, spoken `label` and canonical `lang`. The existing `language` and `just-board` aliases remain; `controls="false"` prefers the board-only presentation, and all booleans accept off/false/no/0.
+
+Every attribute reflects to a property (`justBoard`, `challengeJumps` for hyphenated names). `player`, `game`, `getGame()` and `setGame()` expose the native player; `options` accepts games, witnesses, custom palettes, an external settings host and the original callback. Language/material/theme changes preserve the player, selected puzzle and progress. The native `Player` also has `set({ language, material, theme, justBoard })` for presentation updates. An explicit `challenge-jumps` starts a seeded challenge (capped to the board); absent, classic English/triangle starts stay classic. See [the embed guide](docs/embeds.md), including the compatible `defineTobiishi` and custom-tag `defineGame` registration helpers.
 
 ## Examples
 
@@ -789,14 +795,14 @@ Tobiishi is one of twenty-eight packages, each made for the same site, each at
 
 **Geography & data**
 
-- [address-plus](https://github.com/johnmorrisdotca/address-plus) (アドレスプラス): parse and format addresses in the United States, Canada and Japan. [Demo](https://johnmorrisdotca.github.io/address-plus/).
+- [address-plus](https://github.com/johnmorrisdotca/address-plus) (アドレスプラス): parse and format addresses in the United States, Canada, Japan, Australia and the United Kingdom. [Demo](https://johnmorrisdotca.github.io/address-plus/).
 - [Chizu](https://github.com/johnmorrisdotca/chizu) (地図): maps of the world and of countries' regions, in English and Japanese, with a quiz and callouts. [Demo](https://johnmorrisdotca.github.io/chizu/).
 - [Hata](https://github.com/johnmorrisdotca/hata) (旗): country and regional flags as SVG, at their true proportions and keyed by ISO code. [Demo](https://johnmorrisdotca.github.io/hata/).
 - [Kuni](https://github.com/johnmorrisdotca/kuni) (国): countries and their regions, with ISO codes and names in English and Japanese. [Demo](https://johnmorrisdotca.github.io/kuni/).
 
 **Developer tools**
 
-- [REST in Pieces](https://github.com/spxis/rest-in-pieces) (レスト・イン・ピーシズ): seeded test data and REST APIs for frontend development, with latency and error drills. [Demo](https://spxis.github.io/rest-in-pieces/).
+- [REST in Pieces](https://github.com/spxis/rest-in-pieces) (レスト・イン・ピーシーズ): seeded test data and REST APIs for frontend development, with latency and error drills. [Demo](https://spxis.github.io/rest-in-pieces/).
 
 
 **This package is Tobiishi.** The demos of all twenty-eight share one header and footer, so each links the rest.
@@ -811,7 +817,7 @@ pnpm test:package     # build, pack as npm does, install and import every entry
 pnpm test:readme      # run every example in this README against the built package
 pnpm test:demo        # build the demo and drive it in a real browser
 pnpm screenshots:readme   # build the demo and retake the README's pictures in docs/images
-pnpm demo             # serve the demo on port 6718 (PORT overrides it)
+pnpm demo             # serve the demo on port 6901 (PORT overrides it)
 ```
 
 [Public demo](https://johnmorrisdotca.github.io/tobiishi/). The demo reuses the byte-identical `family.css` and

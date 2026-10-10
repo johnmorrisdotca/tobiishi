@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+- Add the shared embed builder, validated iframe route, reflected settings and custom-tag helpers. Preserve the existing language/just-board aliases and game-shaped change event; events now cross shadow roots with JSON-safe detail. Add native player presentation updates so language, material and device theme changes keep progress.
+- Preview and browser-test ports now default to 6901, with PORT/TEST_PORT overrides.
+
+
 All notable changes to this project are written here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses
 [Semantic Versioning](https://semver.org/).

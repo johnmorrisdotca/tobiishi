@@ -1,3 +1,3 @@
-/** Browser-only entry point that immediately registers the default custom element. */
-import { defineTobiishi } from "./element.js";
-defineTobiishi();
+import { defineGame } from "./element.js";
+defineGame();
+export * from "./element.js";

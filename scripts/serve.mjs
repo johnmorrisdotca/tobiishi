@@ -10,6 +10,10 @@ createServer(async (req, res) => {
       "." +
         (path === "/"
           ? "/demo/index.html"
+          : path.startsWith("/embed/")
+            ? "/site" + (path.endsWith("/") ? path + "index.html" : path)
+          : ["/builder.html", "/builder.js", "/builder.css", "/family-embed-builder.js", "/api.html", "/api.css"].includes(path)
+            ? "/site" + path
           : ["/family.css", "/tobiishi.css", "/demo.js"].includes(path)
             ? "/demo" + path
             : path),
@@ -25,6 +29,6 @@ createServer(async (req, res) => {
     res.statusCode = 404;
     res.end("Not found");
   }
-}).listen(Number(process.env.PORT ?? 6714), "127.0.0.1", () =>
-  console.log("Tobiishi: http://127.0.0.1:" + String(process.env.PORT ?? 6714)),
+}).listen(Number(process.env.PORT ?? 6901), "127.0.0.1", () =>
+  console.log("Tobiishi: http://127.0.0.1:" + String(process.env.PORT ?? 6901)),
 );
