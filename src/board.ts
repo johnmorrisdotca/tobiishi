@@ -1,17 +1,63 @@
-/** A hole's stable coordinate within a board shape, independent of its drawing. */
+/** A hole's stable coordinate within a board shape, independent of its drawing.
+ *
+ * @example
+ * ```ts
+ * import type { Cell } from "@johnmorrisdotca/tobiishi";
+ *
+ * const value: Cell = {x:0,y:0};
+ * console.log(value);
+ * ```
+ */
 export type Cell = Readonly<{ x: number; y: number }>;
-/** A legal solitaire jump from an occupied hole over a peg to an empty hole. */
+/** A legal solitaire jump from an occupied hole over a peg to an empty hole.
+ *
+ * @example
+ * ```ts
+ * import type { Jump } from "@johnmorrisdotca/tobiishi";
+ *
+ * const value: Jump = {from:0,over:1,to:2};
+ * console.log(value);
+ * ```
+ */
 export type Jump = Readonly<{ from: number; over: number; to: number }>;
-/** Immutable hole lattice and all legal jump triples for a board. */
+/** Immutable hole lattice and all legal jump triples for a board.
+ *
+ * @example
+ * ```ts
+ * import { makeBoard } from "@johnmorrisdotca/tobiishi";
+ * import type { Board } from "@johnmorrisdotca/tobiishi";
+ *
+ * const board = makeBoard("Three holes",[{x:0,y:0},{x:1,y:0},{x:2,y:0}]);
+ * const value: Board = board;
+ * console.log(value);
+ * ```
+ */
 export type Board = Readonly<{
   name: string;
   lattice: "square" | "triangle";
   cells: readonly Cell[];
   jumps: readonly Jump[];
 }>;
-/** Built-in board outlines supported by the player and challenge packs. */
+/** Built-in board outlines supported by the player and challenge packs.
+ *
+ * @example
+ * ```ts
+ * import type { Shape } from "@johnmorrisdotca/tobiishi";
+ *
+ * const value: Shape = "triangle";
+ * console.log(value);
+ * ```
+ */
 export type Shape = "english" | "european" | "triangle" | "diamond" | "heart" | "star" | "hexagon" | "wide" | "tall";
-/** Built-in shape names in player-menu order. */
+/** Built-in shape names in player-menu order.
+ *
+ * @example
+ * ```ts
+ * import { SHAPES } from "@johnmorrisdotca/tobiishi";
+ *
+ * console.log(SHAPES);
+ * ```
+ */
 export const SHAPES: readonly Shape[] = [
   "english",
   "triangle",
@@ -23,17 +69,45 @@ export const SHAPES: readonly Shape[] = [
   "wide",
   "tall",
 ];
-/** Orthogonal direction steps used by square-lattice boards. */
+/** Orthogonal direction steps used by square-lattice boards.
+ *
+ * @example
+ * ```ts
+ * import { SQUARE_STEPS } from "@johnmorrisdotca/tobiishi";
+ *
+ * console.log(SQUARE_STEPS);
+ * ```
+ */
 export const SQUARE_STEPS = [
   [1, 0],
   [-1, 0],
   [0, 1],
   [0, -1],
 ] as const;
-/** Six jump directions used by the triangular lattice. */
+/** Six jump directions used by the triangular lattice.
+ *
+ * @example
+ * ```ts
+ * import { TRIANGLE_STEPS } from "@johnmorrisdotca/tobiishi";
+ *
+ * console.log(TRIANGLE_STEPS);
+ * ```
+ */
 export const TRIANGLE_STEPS = [...SQUARE_STEPS, [1, 1], [-1, -1]] as const;
 
-/** Make a board from holes and a lattice; absent holes cannot be crossed. */
+/** Make a board from holes and a lattice; absent holes cannot be crossed.
+ *
+ * @param name - A nonempty native board name of at most 100 characters.
+ * @param cells - Distinct valid integer-coordinate holes, in stable index order; at most 128.
+ * @param lattice - The native square or triangular jump lattice.
+ * @returns Make a board from holes and a lattice; absent holes cannot be crossed.
+ * @example
+ * ```ts
+ * import { makeBoard } from "@johnmorrisdotca/tobiishi";
+ *
+ * console.log(makeBoard("Three holes",[{x:0,y:0},{x:1,y:0},{x:2,y:0}]).jumps.length);
+ * ```
+ */
 export function makeBoard(name: string, cells: readonly Cell[], lattice: Board["lattice"] = "square"): Board {
   if (
     typeof name !== "string" ||
@@ -74,7 +148,18 @@ export function makeBoard(name: string, cells: readonly Cell[], lattice: Board["
   });
 }
 
-/** Creates a square-lattice rectangle, including supported wide and tall boards. */
+/** Creates a square-lattice rectangle, including supported wide and tall boards.
+ *
+ * @param width - The validated rectangle width in holes.
+ * @param height - The validated rectangle height in holes.
+ * @returns Creates a square-lattice rectangle, including supported wide and tall boards.
+ * @example
+ * ```ts
+ * import { rectangleBoard } from "@johnmorrisdotca/tobiishi";
+ *
+ * console.log(rectangleBoard(3,3).cells.length);
+ * ```
+ */
 export function rectangleBoard(width: number, height: number): Board {
   if (
     !Number.isSafeInteger(width) ||
@@ -91,7 +176,17 @@ export function rectangleBoard(width: number, height: number): Board {
     Array.from({ length: width * height }, (_, i) => ({ x: i % width, y: Math.floor(i / width) })),
   );
 }
-/** A familiar lattice or a shaped outline. Shapes describe holes, never a different capture rule. */
+/** A familiar lattice or a shaped outline. Shapes describe holes, never a different capture rule.
+ *
+ * @param shape - One of the built-in SHAPES.
+ * @returns A familiar lattice or a shaped outline. Shapes describe holes, never a different capture rule.
+ * @example
+ * ```ts
+ * import { boardOf } from "@johnmorrisdotca/tobiishi";
+ *
+ * console.log(boardOf("triangle").cells.length);
+ * ```
+ */
 export function boardOf(shape: Shape = "english"): Board {
   if (!SHAPES.includes(shape)) throw new RangeError("Unknown shape");
   if (shape === "wide" || shape === "tall") {

@@ -1,4 +1,12 @@
-/** Localized English and Japanese labels used by the player. */
+/** Localized English and Japanese labels used by the player.
+ *
+ * @example
+ * ```ts
+ * import { STRINGS } from "@johnmorrisdotca/tobiishi/play";
+ *
+ * console.log(STRINGS.ja.title);
+ * ```
+ */
 export const STRINGS = {
   en: {
     title: "Peg Solitaire",
@@ -45,5 +53,14 @@ export const STRINGS = {
     help: "ヒントには探索回数の上限があります。石が多い盤では少し時間がかかります。",
   },
 } as const;
-/** Supported player interface languages. */
+/** Supported player interface languages.
+ *
+ * @example
+ * ```ts
+ * import type { Language } from "@johnmorrisdotca/tobiishi/play";
+ *
+ * const value: Language = "ja";
+ * console.log(value);
+ * ```
+ */
 export type Language = keyof typeof STRINGS;

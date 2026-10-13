@@ -1,17 +1,56 @@
 import { boardOf, type Shape } from "./board.js";
 import { challengeOf, type Challenge } from "./generate.js";
 
-/** Requested witness length category; this is not a measured human rating. */
+/** Requested witness length category; this is not a measured human rating.
+ *
+ * @example
+ * ```ts
+ * import type { ChallengeDifficulty } from "@johnmorrisdotca/tobiishi";
+ *
+ * const value: ChallengeDifficulty = "easy";
+ * console.log(value);
+ * ```
+ */
 export type ChallengeDifficulty = "easy" | "medium" | "hard";
-/** Named goal hole and its localized menu labels. */
+/** Named goal hole and its localized menu labels.
+ *
+ * @example
+ * ```ts
+ * import type { GoalHole } from "@johnmorrisdotca/tobiishi";
+ * import { TOBIISHI_CHALLENGE_PACKS } from "@johnmorrisdotca/tobiishi";
+ *
+ * const value: GoalHole = TOBIISHI_CHALLENGE_PACKS.english.goals[0];
+ * console.log(value);
+ * ```
+ */
 export type GoalHole = Readonly<{ id: string; names: Readonly<Record<"en" | "ja", string>>; x: number; y: number }>;
-/** Curated goal choices for one supported board shape. */
+/** Curated goal choices for one supported board shape.
+ *
+ * @example
+ * ```ts
+ * import type { ChallengePack } from "@johnmorrisdotca/tobiishi";
+ * import { TOBIISHI_CHALLENGE_PACKS } from "@johnmorrisdotca/tobiishi";
+ *
+ * const value: ChallengePack = TOBIISHI_CHALLENGE_PACKS.english;
+ * console.log(value);
+ * ```
+ */
 export type ChallengePack = Readonly<{
   title: Readonly<Record<"en" | "ja", string>>;
   shape: Shape;
   goals: readonly GoalHole[];
 }>;
-/** Generated puzzle augmented with its pack, goal, and requested length category. */
+/** Generated puzzle augmented with its pack, goal, and requested length category.
+ *
+ * @example
+ * ```ts
+ * import type { GoalChallenge } from "@johnmorrisdotca/tobiishi";
+ * import { generateTobiishiChallenge } from "@johnmorrisdotca/tobiishi";
+ *
+ * const value: GoalChallenge = generateTobiishiChallenge("english","centre","easy");
+ * console.log(value);
+ * ```
+ */
 export type GoalChallenge = Challenge & Readonly<{
   pack: Shape;
   packTitle: string;
@@ -26,7 +65,15 @@ const goal = (id: string, en: string, ja: string, x: number, y: number): GoalHol
   y,
 });
 
-/** Named challenge pack metadata; each goal is a distinct hole with a legal witness. */
+/** Named challenge pack metadata; each goal is a distinct hole with a legal witness.
+ *
+ * @example
+ * ```ts
+ * import { TOBIISHI_CHALLENGE_PACKS } from "@johnmorrisdotca/tobiishi";
+ *
+ * console.log(Object.keys(TOBIISHI_CHALLENGE_PACKS));
+ * ```
+ */
 export const TOBIISHI_CHALLENGE_PACKS: Readonly<Record<Shape, ChallengePack>> = {
   english: {
     title: { en: "Crossroads", ja: "交差点" }, shape: "english",
@@ -72,7 +119,19 @@ const DIFFICULTY_JUMPS: Readonly<Record<ChallengeDifficulty, number>> = {
   hard: 9,
 };
 
-/** Creates one fixed-goal puzzle with a complete, replayable legal answer. */
+/** Creates one fixed-goal puzzle with a complete, replayable legal answer.
+ *
+ * @param packKey - A supported native board/pack key.
+ * @param goalId - One of this pack’s named goal identifiers.
+ * @param difficulty - The requested easy, medium or hard witness-length category.
+ * @returns Creates one fixed-goal puzzle with a complete, replayable legal answer.
+ * @example
+ * ```ts
+ * import { generateTobiishiChallenge } from "@johnmorrisdotca/tobiishi";
+ *
+ * console.log(generateTobiishiChallenge("english","centre","easy").answer.length);
+ * ```
+ */
 export function generateTobiishiChallenge(
   packKey: Shape,
   goalId: string,

@@ -1,8 +1,28 @@
 import { boardOf, type Board, type Cell, type Jump, type Shape } from "./board.js";
 import { newGame, type Game } from "./game.js";
-/** A starting position paired with its complete legal witness and seed. */
+/** A starting position paired with its complete legal witness and seed.
+ *
+ * @example
+ * ```ts
+ * import type { Challenge } from "@johnmorrisdotca/tobiishi";
+ * import { classicTriangle } from "@johnmorrisdotca/tobiishi";
+ *
+ * const value: Challenge = classicTriangle();
+ * console.log(value);
+ * ```
+ */
 export type Challenge = Readonly<{ game: Game; answer: readonly Jump[]; seed: string }>;
-/** Creates a deterministic pseudo-random stream from a text seed. */
+/** Creates a deterministic pseudo-random stream from a text seed.
+ *
+ * @param seed - A reproducible text seed.
+ * @returns Creates a deterministic pseudo-random stream from a text seed.
+ * @example
+ * ```ts
+ * import { seededRandom } from "@johnmorrisdotca/tobiishi";
+ *
+ * console.log(seededRandom("sample")());
+ * ```
+ */
 export function seededRandom(seed: string): () => number {
   let state = 2166136261;
   for (const c of seed) state = Math.imul(state ^ c.charCodeAt(0), 16777619);
@@ -13,7 +33,20 @@ export function seededRandom(seed: string): () => number {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
-/** Grow backward from one peg. The reversed jumps are a proof, even on unusual boards. */
+/** Grow backward from one peg. The reversed jumps are a proof, even on unusual boards.
+ *
+ * @param board - The validated native board and all its legal jump triples.
+ * @param seed - A reproducible text seed.
+ * @param jumps - Requested reverse-growth jump count, from 1 up to board cell count minus 1.
+ * @param goal - A required final native hole index or coordinate, as specified by this signature.
+ * @returns Grow backward from one peg. The reversed jumps are a proof, even on unusual boards.
+ * @example
+ * ```ts
+ * import { boardOf, generate } from "@johnmorrisdotca/tobiishi";
+ *
+ * console.log(generate(boardOf("triangle"),"sample",3).answer.length);
+ * ```
+ */
 export function generate(board: Board, seed: string, jumps = 12, goal?: number): Challenge {
   if (!Number.isSafeInteger(jumps) || jumps < 1 || jumps >= board.cells.length)
     throw new RangeError("Invalid challenge length");
@@ -41,7 +74,16 @@ export function generate(board: Board, seed: string, jumps = 12, goal?: number):
   if (!best || best.answer.length === 0) throw new RangeError("Board has no challenge");
   return best;
 }
-/** Returns the classic centre-empty English game with its complete solution. */
+/** Returns the classic centre-empty English game with its complete solution.
+ *
+ * @returns Returns the classic centre-empty English game with its complete solution.
+ * @example
+ * ```ts
+ * import { classicEnglish } from "@johnmorrisdotca/tobiishi";
+ *
+ * console.log(classicEnglish().answer.length);
+ * ```
+ */
 export function classicEnglish(): Challenge {
   const board = boardOf("english"),
     target = board.cells.findIndex((c) => c.x === 3 && c.y === 3);
@@ -67,7 +109,20 @@ export function classicEnglish(): Challenge {
     seed: "classic",
   });
 }
-/** Generates a seeded challenge on a built-in shape, optionally fixing its final hole. */
+/** Generates a seeded challenge on a built-in shape, optionally fixing its final hole.
+ *
+ * @param shape - One of the built-in SHAPES.
+ * @param seed - A reproducible text seed.
+ * @param jumps - Requested reverse-growth jump count, from 1 up to board cell count minus 1.
+ * @param goal - A required final native hole index or coordinate, as specified by this signature.
+ * @returns Generates a seeded challenge on a built-in shape, optionally fixing its final hole.
+ * @example
+ * ```ts
+ * import { challengeOf } from "@johnmorrisdotca/tobiishi";
+ *
+ * console.log(challengeOf("triangle","sample",3).answer.length);
+ * ```
+ */
 export function challengeOf(shape: Shape, seed = "tobiishi", jumps = 12, goal?: Cell): Challenge {
   const board = boardOf(shape);
   if (goal === undefined) return generate(board, seed, jumps);
@@ -76,7 +131,16 @@ export function challengeOf(shape: Shape, seed = "tobiishi", jumps = 12, goal?: 
   return generate(board, seed, jumps, goalIndex);
 }
 
-/** Returns the full triangle with the apex empty and any final hole accepted. */
+/** Returns the full triangle with the apex empty and any final hole accepted.
+ *
+ * @returns Returns the full triangle with the apex empty and any final hole accepted.
+ * @example
+ * ```ts
+ * import { classicTriangle } from "@johnmorrisdotca/tobiishi";
+ *
+ * console.log(classicTriangle().answer.length);
+ * ```
+ */
 export function classicTriangle(): Challenge {
   const board = boardOf("triangle");
   const pairs = [

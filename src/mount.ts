@@ -15,7 +15,19 @@ import {
 import { draw, boundsOf, pointOf, MATERIALS, type Material, type Theme } from "./draw.js";
 import { STRINGS, type Language } from "./strings.js";
 import { solve } from "./solve.js";
-/** Initial puzzle, display choices, optional settings host, and persistence callback. */
+/** Initial puzzle, display choices, optional settings host, and persistence callback.
+ *
+ * @example
+ * ```ts
+ * import { makeBoard, newGame } from "@johnmorrisdotca/tobiishi";
+ * import type { MountOptions } from "@johnmorrisdotca/tobiishi/play";
+ *
+ * const board = makeBoard("Three holes",[{x:0,y:0},{x:1,y:0},{x:2,y:0}]);
+ * const game = newGame(board,[true,true,false],2);
+ * const value: MountOptions = {game,language:"ja",material:"glass"};
+ * console.log(value);
+ * ```
+ */
 export type MountOptions = {
   game?: Game;
   challenge?: Challenge;
