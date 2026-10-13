@@ -4,7 +4,7 @@ import { TOBIISHI_CHALLENGE_PACKS, generateTobiishiChallenge } from "../dist/ind
 
 const WORDS = {
   en: {
-    pageApi: "API reference", settings: "Your board", gameTitle: "Peg Solitaire", instructions: "Jump over a neighbouring peg into an empty hole. Leave one peg at the marked goal.",
+    pageDocs: "Docs", pageApi: "API reference", settings: "Your board", gameTitle: "Peg Solitaire", instructions: "Jump over a neighbouring peg into an empty hole. Leave one peg at the marked goal.",
     pitch: "Peg solitaire: jump a stone over its neighbour, and leave just one.", name: "Tobiishi means stepping stones.",
     nameLink: "The name", readme: "Readme", foot: "Nine boards · Three stone materials · Keyboard and touch",
     release: "Open source · @johnmorrisdotca/tobiishi", challengePacks: "Short goal challenges",
@@ -14,7 +14,7 @@ const WORDS = {
     challengeSaved: "Challenge progress is saved on this device.", freePlay: "Free play. Choose a board below or start a goal challenge.",
   },
   ja: {
-    pageApi: "APIリファレンス", settings: "盤を選ぶ", gameTitle: "ペグ・ソリティア", instructions: "隣の石を飛び越え、空いた穴へ。目印の穴に石を1つ残します。",
+    pageDocs: "ドキュメント", pageApi: "APIリファレンス", settings: "盤を選ぶ", gameTitle: "ペグ・ソリティア", instructions: "隣の石を飛び越え、空いた穴へ。目印の穴に石を1つ残します。",
     pitch: "隣の石を飛び越え、最後に石を1つ残すペグ・ソリティア。", name: "飛び石。石から石へ進む名前です。",
     nameLink: "名前について", readme: "説明書", foot: "9種類の盤・3種類の石・キーボードとタッチ操作",
     release: "オープンソース · @johnmorrisdotca/tobiishi", challengePacks: "ゴール付きの短い問題",
@@ -163,6 +163,7 @@ languageState = familyLanguage({
   id: "tobiishi",
   words: WORDS,
   onChange: language => {
+    docsLink(language);
     populatePacks(language);
     show(language, player?.getGame(), activeChallenge);
   },
@@ -174,3 +175,6 @@ if (params.has("goal")) goalSelector.value = params.get("goal");
 if (params.has("difficulty")) difficultySelector.value = params.get("difficulty");
 restore(languageState.lang);
 window.tobiishi = { getGame: () => player.getGame() };
+
+function docsLink(language){document.querySelector('[data-say="pageDocs"]')?.setAttribute("href",language==="ja"?"docs/ja/index.html":"docs/index.html");}
+docsLink(languageState.lang);

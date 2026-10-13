@@ -10,7 +10,7 @@ createServer(async (req, res) => {
       "." +
         (path === "/"
           ? "/demo/index.html"
-          : path.startsWith("/embed/")
+          : (path.startsWith("/embed/") || path.startsWith("/docs/") || ["/llms.txt", "/llms-full.txt"].includes(path))
             ? "/site" + (path.endsWith("/") ? path + "index.html" : path)
           : ["/builder.html", "/builder.js", "/builder.css", "/family-embed-builder.js", "/api.html", "/api.css"].includes(path)
             ? "/site" + path

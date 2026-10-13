@@ -1,4 +1,4 @@
-<h1 align="center">Tobiishi <sub>飛び石</sub></h1>
+<h1 align="center">Tobiishi <sub>飛び石</sub> — Peg solitaire</h1>
 
 <p align="center"><strong>Peg solitaire on classic boards and playful shapes.</strong><br>
 Nine outlines, custom rectangles, seeded solvable challenges and accessible English/Japanese play. No runtime dependencies.</p>
@@ -9,9 +9,11 @@ Nine outlines, custom rectangles, seeded solvable challenges and accessible Engl
   <a href="./LICENSE"><img alt="MIT licence" src="https://img.shields.io/badge/licence-MIT-2f5d4a"></a>
   <img alt="No runtime dependencies" src="https://img.shields.io/badge/dependencies-0-2f5d4a">
   <img alt="TypeScript" src="https://img.shields.io/badge/types-TypeScript-3178c6">
+  <a href="https://johnmorrisdotca.github.io/tobiishi/docs/api/main/index.html"><img alt="3.7 kB minified and gzipped" src="https://img.shields.io/badge/min%2Bgzip-3.7%20kB-2f5d4a"></a>
+  <a href="https://www.npmjs.com/package/@johnmorrisdotca/tobiishi#provenance"><img alt="Published with npm provenance" src="https://img.shields.io/badge/npm-provenance-2f5d4a"></a>
 </p>
 
-<p align="center"><a href="https://johnmorrisdotca.github.io/tobiishi/"><strong>Play a board →</strong></a> · <a href="https://johnmorrisdotca.github.io/tobiishi/api.html">API reference</a> · <a href="docs/API.md">API guide</a></p>
+<p align="center"><a href="https://johnmorrisdotca.github.io/tobiishi/"><strong>Play a board →</strong></a> · <a href="https://johnmorrisdotca.github.io/tobiishi/docs/">Documentation</a> · <a href="https://johnmorrisdotca.github.io/tobiishi/docs/guides/getting-started.html">Getting started</a> · <a href="https://johnmorrisdotca.github.io/tobiishi/api.html">API reference</a> · <a href="docs/API.md">API guide</a></p>
 
 <table align="center">
 <tr>
@@ -203,6 +205,17 @@ The pieces come in three materials, and the player shows what you can do with a 
 ## Use it in your project
 
 Tobiishi is three things, each usable without the others: **the engine** (boards, jumps, saves, challenges and the solver, as pure functions with no DOM), **the drawing** (a board as SVG text) and **the player** (one function call or one tag). The table under [API](#entry-points) says which entry holds which.
+
+### Install under another name
+
+```sh
+npm install peg-solitaire@npm:@johnmorrisdotca/tobiishi
+```
+
+```ts no-check
+import { classicTriangle, pegCount } from "peg-solitaire";
+console.log(pegCount(classicTriangle().game));
+```
 
 ### Install
 
@@ -618,6 +631,8 @@ The `seed` is any text, and the same text gives the same challenge. It is read o
 
 ## API
 
+The [documentation](https://johnmorrisdotca.github.io/tobiishi/docs/) provides paired guides, local search and checked examples. The [API index](https://johnmorrisdotca.github.io/tobiishi/api.html) retains export anchors.
+
 Every export of every entry point is in the [complete API reference](https://johnmorrisdotca.github.io/tobiishi/api.html), built from the source signatures. The [API guide](docs/API.md) explains the engine, drawing, player and browser tag.
 
 ### Entry points
@@ -703,24 +718,7 @@ The engine, the nine boards, the packs and the player are in. Nothing else is pr
 
 ## Architecture
 
-```text
-src/
-├── board.ts
-├── challenges.ts
-├── draw-entry.ts
-├── draw.ts
-├── element-define.ts
-├── element.ts
-├── game.ts
-├── generate.ts
-├── index.ts
-├── mount.ts
-├── play-entry.ts
-├── solve.ts
-└── strings.ts
-```
-
-The engine is `board.ts` (the lattice and every legal jump of a board, frozen), `game.ts` (a position and what a jump does to it), `solve.ts` (the bounded search), `generate.ts` (the backward growth of a challenge and the two classic starts) and `challenges.ts` (the 81 named challenges). `draw.ts` is the SVG and `mount.ts` the player, which uses both; `strings.ts` is its words. `element.ts` defines the tag and `element-define.ts` registers it as an effect of being imported. The three `*-entry.ts` and `index.ts` files are the package's entry points. None of the engine files touches the DOM.
+The immutable engine, generation, bounded search and player layers are explained in the [architecture guide](docs/guides/architecture.md), which preserves the complete source tree and original description.
 
 ## The name
 
@@ -815,6 +813,8 @@ pnpm install --frozen-lockfile
 pnpm check            # lint, types, tests and the presentation checks
 pnpm test:package     # build, pack as npm does, install and import every entry
 pnpm test:readme      # run every example in this README against the built package
+pnpm docs:check       # typecheck and run public API and guide examples
+pnpm docs:site        # build the documentation and its local search
 pnpm test:demo        # build the demo and drive it in a real browser
 pnpm screenshots:readme   # build the demo and retake the README's pictures in docs/images
 pnpm demo             # serve the demo on port 6901 (PORT overrides it)

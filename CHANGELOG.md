@@ -6,6 +6,8 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+- Add the bilingual documentation site, checked public examples, paired guides, local search and machine-readable pages.
+
 - Add the shared embed builder, validated iframe route, reflected settings and custom-tag helpers. Preserve the existing language/just-board aliases and game-shaped change event; events now cross shadow roots with JSON-safe detail. Add native player presentation updates so language, material and device theme changes keep progress.
 - Preview and browser-test ports now default to 6901, with PORT/TEST_PORT overrides.
 
