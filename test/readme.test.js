@@ -25,6 +25,19 @@ describe("the standard's checks catch what they are for", () => {
   const ok = (name) => ({ file: name, bytes: 1000 });
   const faultsFor = (readme, pictures = []) => lintReadme({ readme, pkg, pictures, minSubjects: 0 });
 
+
+  it("uses the repository owner and published homepage for another GitHub account", () => {
+    const other = { ...pkg, repository: { url: "git+https://github.com/spxis/sample.git" }, homepage: "https://spxis.github.io/sample/" };
+    const prefix = "https://raw.githubusercontent.com/spxis/sample/main/docs/images/";
+    const text = `# T\n\n## API\n\n[API](https://spxis.github.io/sample/api.html)\n\n<picture><source media="(prefers-color-scheme: dark)" srcset="${prefix}hero-desk-dark.webp"><img src="${prefix}hero-desk-light.webp" alt="The sample response on its native playground." width="1200"></picture>\n`;
+    const faults = lintReadme({ readme: text, pkg: other, pictures: [ok("hero-desk-light.webp"), ok("hero-desk-dark.webp")], minSubjects: 0 }).join("\n");
+    expect(faults).not.toMatch(/not https:\/\/raw\.githubusercontent|"## API" does not link/);
+    const wrongOwner = lintReadme({ readme: text.replaceAll("/spxis/", "/johnmorrisdotca/"), pkg: other, pictures: [], minSubjects: 0 }).join("\n");
+    expect(wrongOwner).toMatch(/not https:\/\/raw\.githubusercontent\.com\/spxis\/sample/);
+    const wrongHomepage = lintReadme({ readme: text.replace("https://spxis.github.io/sample/api.html", "https://johnmorrisdotca.github.io/sample/api.html"), pkg: other, pictures: [], minSubjects: 0 }).join("\n");
+    expect(wrongHomepage).toMatch(/"## API" does not link the full reference/);
+  });
+
   it("refuses a fenced block with no language, and a language that is not listed", () => {
     expect(faultsFor("# T\n\n```\nx\n```\n\n```pascal\nx\n```\n").join("\n")).toMatch(/no language[\s\S]*pascal/);
   });
@@ -62,6 +75,14 @@ describe("the standard's checks catch what they are for", () => {
 
   it("refuses a README longer than npm will show", () => {
     expect(faultsFor(`# T\n\n${"word ".repeat(13_000)}\n`).join("\n")).toMatch(/npm shows only the first 65,536/);
+  });
+
+  it("refuses a title or a description without the English job, when docs/site.json names one", () => {
+    const named = { ...pkg, description: "Sample サンプル — tiles for JavaScript: things." };
+    expect(lintReadme({ readme: "# Sample サンプル — tiles for JavaScript\n", pkg: named, pictures: [], minSubjects: 0, job: "tiles for JavaScript" }).join("\n")).not.toMatch(/job/);
+    const faults = lintReadme({ readme: "# Sample サンプル\n", pkg, pictures: [], minSubjects: 0, job: "tiles for JavaScript" }).join("\n");
+    expect(faults).toMatch(/The title is "Sample サンプル"; it carries the job/);
+    expect(faults).toMatch(/description does not carry the job/);
   });
 
   it("refuses a package whose files ship the pictures", () => {
