@@ -3,23 +3,23 @@
   "entries": {
     ".": {
       "minified": 9692,
-      "gzip": 3749
+      "gzip": 3781
     },
     "./draw": {
       "minified": 1841,
-      "gzip": 886
+      "gzip": 895
     },
     "./play": {
       "minified": 19886,
-      "gzip": 7236
+      "gzip": 7321
     },
     "./element": {
       "minified": 28129,
-      "gzip": 9673
+      "gzip": 9763
     },
     "./element/define": {
       "minified": 28134,
-      "gzip": 9677
+      "gzip": 9768
     }
   }
 }

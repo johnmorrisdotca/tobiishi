@@ -19,4 +19,4 @@ console.log(isGameSolved(jumpAt(game,jump.from,jump.to)),game.pegs);
 
 ## 入口を選ぶ
 
-主な入口には、盤、状態、探索、問題生成があります。`/draw` は SVG の文字列を返し、`/play` はブラウザーのプレイヤーを表示します。`/element` は要素のクラス、`/element/define` は登録です。[移動の規則](moves-and-state.md)、[シード付きの問題](seeded-challenges.md)、[埋め込み](embed-and-mount.md)へ進めます。
+主な入口には、盤、状態、探索、問題生成があります。`/draw`はSVGの文字列を返し、`/play`はブラウザーのプレイヤーを表示します。`/element`は要素のクラス、`/element/define`は登録です。[移動の規則](moves-and-state.md)、[シード付きの問題](seeded-challenges.md)、[埋め込み](embed-and-mount.md)へ進めます。

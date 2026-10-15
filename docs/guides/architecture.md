@@ -28,4 +28,4 @@ The engine is `board.ts` (the lattice and every legal jump of a board, frozen), 
 
 ## Documentation and development
 
-The shared generator reads the public TypeScript declarations and checks concrete examples. It builds paired references/guides, Markdown twins, llms files and local search. The demo server serves the same built docs beside the game; browser commands build the site before starting that server. No engine output changed in this rollout.
+The shared generator reads the public TypeScript declarations and checks concrete examples. It builds paired references/guides, Markdown twins, llms files and local search. The demo server serves the same built docs beside the game; browser commands build the site before starting that server.

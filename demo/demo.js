@@ -4,7 +4,7 @@ import { TOBIISHI_CHALLENGE_PACKS, generateTobiishiChallenge } from "../dist/ind
 
 const WORDS = {
   en: {
-    pageDocs: "Docs", pageApi: "API reference", settings: "Your board", gameTitle: "Peg Solitaire", instructions: "Jump over a neighbouring peg into an empty hole. Leave one peg at the marked goal.",
+    pageDocs: "Docs", pageApi: "API", settings: "Your board", gameTitle: "Peg Solitaire", instructions: "Jump over a neighbouring peg into an empty hole. Leave one peg at the marked goal.",
     pitch: "Peg solitaire: jump a stone over its neighbour, and leave just one.", name: "Tobiishi means stepping stones.",
     nameLink: "The name", readme: "Readme", foot: "Nine boards · Three stone materials · Keyboard and touch",
     release: "Open source · @johnmorrisdotca/tobiishi", challengePacks: "Short goal challenges",

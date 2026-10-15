@@ -6,26 +6,23 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
-- Synchronize documentation tooling for repository layouts, generated type references, Node entry points and repository-specific README links.
+## [0.3.0] - 2026-10-14
 
-- Keep complete resource catalogues on the documentation entry index and the active resource beside core navigation; render valid default imports in HTML and Markdown.
-
-- Add the bilingual documentation site, checked public examples, paired guides, local search and machine-readable pages.
-
-- Add the shared embed builder, validated iframe route, reflected settings and custom-tag helpers. Preserve the existing language/just-board aliases and game-shaped change event; events now cross shadow roots with JSON-safe detail. Add native player presentation updates so language, material and device theme changes keep progress.
-- Preview and browser-test ports now default to 6901, with PORT/TEST_PORT overrides.
-
-
-
+The game is a custom element with the family's standard embed attributes and a shared builder, and the package has an English and Japanese documentation site with a checked example for every export. The board, the rules, the solver and saved games are unchanged.
 
 ### Added
 
+- Add the bilingual documentation site, checked public examples, paired guides, local search and machine-readable pages.
+- Add the shared embed builder, validated iframe route, reflected settings and custom-tag helpers. Preserve the existing language/just-board aliases and game-shaped change event; events now cross shadow roots with JSON-safe detail. Add native player presentation updates so language, material and device theme changes keep progress.
 - Share a package-independent embed builder for option controls, preview adapters, code tabs and shareable links.
 
 ### Changed
 
+- The API link in the header reads "API" in English, so that the header takes the same number of rows in English and in Japanese on a phone, as the demo's test of a language change asks.
+- Synchronize documentation tooling for repository layouts, generated type references, Node entry points and repository-specific README links.
+- Keep complete resource catalogues on the documentation entry index and the active resource beside core navigation; render valid default imports in HTML and Markdown.
+- Preview and browser-test ports now default to 6901, with PORT/TEST_PORT overrides.
 - Group the package family by kind, alphabetize each group, and include the geography packages and REST in Pieces in the shared footer and README.
-
 - Update the shared family description for addresses in all seven supported countries, including France and Germany.
 
 ## [0.2.3] - 2026-10-06

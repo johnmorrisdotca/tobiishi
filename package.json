@@ -1,6 +1,6 @@
 {
   "name": "@johnmorrisdotca/tobiishi",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Tobiishi 飛び石 — Peg solitaire: nine classic, shaped, wide and tall boards, immutable rules, seeded solvable challenges, SVG drawing and accessible English/Japanese play. Zero runtime dependencies.",
   "type": "module",
   "author": "John Morris",
