@@ -7,6 +7,11 @@ import { type MountOptions, mount, type Player } from "./mount.js";
 const ElementBase = typeof HTMLElement === "undefined" ? (class {} as typeof HTMLElement) : HTMLElement;
 const isOn = (value: string | null, fallback = false): boolean =>
   value === null ? fallback : !["false", "off", "no", "0"].includes(value.trim().toLowerCase());
+const EMBED_STYLE = [
+  "[data-tobiishi-embed]{font:16px/1.5 system-ui,sans-serif;color:light-dark(#1f2320,#ece8dc);--ink:light-dark(#1f2320,#ece8dc);--surface:light-dark(#fbf8f1,#1d201e);--rule:light-dark(#ddd6c6,#3a3d38);--accent:light-dark(#b5452c,#ff8a6b)}",
+  "[data-tobiishi-embed] .tobiishi select{max-width:100%;min-width:0}",
+  "[data-tobiishi-embed][size] .tobiishi,[data-tobiishi-embed][width] .tobiishi{max-width:100%}",
+].join("");
 /**
  * The native mounted options, checked by the shared builder.
  * @example
@@ -245,8 +250,7 @@ export class TobiishiGame extends ElementBase {
     if (target.querySelector("style[data-tobiishi-embed-style]") === null) {
       const style = this.ownerDocument.createElement("style");
       style.setAttribute("data-tobiishi-embed-style", "");
-      style.textContent =
-        "[data-tobiishi-embed]{font:16px/1.5 system-ui,sans-serif;color:light-dark(#1f2320,#ece8dc);--ink:light-dark(#1f2320,#ece8dc);--surface:light-dark(#fbf8f1,#1d201e);--rule:light-dark(#ddd6c6,#3a3d38);--accent:light-dark(#b5452c,#ff8a6b)}[data-tobiishi-embed] .tobiishi select{max-width:100%;min-width:0}[data-tobiishi-embed][size] .tobiishi,[data-tobiishi-embed][width] .tobiishi{max-width:100%}";
+      style.textContent = EMBED_STYLE;
       target.append(style);
     }
     if (this.hasAttribute("label")) {

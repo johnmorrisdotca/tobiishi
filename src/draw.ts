@@ -46,6 +46,39 @@ export const THEMES: Record<Material, Theme> = {
   wood: { board: "#e2ba7a", hole: "#725640", peg: "#ab633a", edge: "#633b25", accent: "#b5452c" },
   glass: { board: "#fbf8f1", hole: "#6b6f68", peg: "#579caa", edge: "#265865", accent: "#b5452c" },
 };
+
+/** Distance between neighbouring holes on a square board, and across a row on a triangular one. */
+const PITCH = 60;
+/** Distance between rows on a triangular board: the pitch times √3/2, rounded. */
+const TRIANGLE_ROW_PITCH = 52;
+/** Space between the outermost hole centres and the edge of the drawing. */
+const MARGIN = 45;
+const FRAME = { inset: 3, stroke: 6, radius: 16, colour: "#a98954" } as const;
+const HOLE_RADIUS = 24;
+const TARGET_RING_RADIUS = 27;
+const SELECTED_RING_RADIUS = 25;
+const PEG_RADIUS = 19;
+const PEG_SHINE_RADIUS = 5;
+
+type Point = { x: number; y: number };
+
+/** Every hole's centre, measured once for the whole board. */
+function pointsOf(game: Game): Point[] {
+  const { cells, lattice } = game.board;
+  const triangle = lattice === "triangle";
+  const xs = cells.map((cell) => (triangle ? cell.x - cell.y / 2 : cell.x));
+  const minX = Math.min(...xs);
+  const minY = Math.min(...cells.map((cell) => cell.y));
+  const rowPitch = triangle ? TRIANGLE_ROW_PITCH : PITCH;
+  return cells.map((cell, i) => ({ x: (xs[i]! - minX) * PITCH + MARGIN, y: (cell.y - minY) * rowPitch + MARGIN }));
+}
+
+function boundsOfPoints(points: readonly Point[]): { width: number; height: number } {
+  return {
+    width: Math.max(...points.map((point) => point.x)) + MARGIN,
+    height: Math.max(...points.map((point) => point.y)) + MARGIN,
+  };
+}
 /** Maps a board cell index to its SVG centre point.
  *
  * @param game - The immutable native peg position, board, target, history and assistance marker.
@@ -62,11 +95,7 @@ export const THEMES: Record<Material, Theme> = {
  * ```
  */
 export function pointOf(game: Game, cell: number): { x: number; y: number } {
-  const c = game.board.cells[cell]!;
-  const xs = game.board.cells.map((p) => (game.board.lattice === "triangle" ? p.x - p.y / 2 : p.x));
-  const minX = Math.min(...xs);
-  const minY = Math.min(...game.board.cells.map((p) => p.y));
-  return { x: (xs[cell]! - minX) * 60 + 45, y: (c.y - minY) * (game.board.lattice === "triangle" ? 52 : 60) + 45 };
+  return pointsOf(game)[cell]!;
 }
 /** Returns the SVG view box size for the board.
  *
@@ -83,10 +112,7 @@ export function pointOf(game: Game, cell: number): { x: number; y: number } {
  * ```
  */
 export function boundsOf(game: Game): { width: number; height: number } {
-  return {
-    width: Math.max(...game.board.cells.map((_, i) => pointOf(game, i).x)) + 45,
-    height: Math.max(...game.board.cells.map((_, i) => pointOf(game, i).y)) + 45,
-  };
+  return boundsOfPoints(pointsOf(game));
 }
 /** Escapes text for safe inclusion in XML attributes and content.
  *
@@ -125,13 +151,26 @@ export function draw(
   options: { material?: Material; theme?: Partial<Theme>; selected?: number | null; title?: string } = {},
 ): string {
   const theme = { ...THEMES[options.material ?? "stone"], ...options.theme };
-  const bounds = boundsOf(game);
-  const cells = game.board.cells
-    .map((_, i) => {
-      const p = pointOf(game, i);
-      const filled = game.pegs[i];
-      return `<g data-cell="${i}"><circle cx="${p.x}" cy="${p.y}" r="24" fill="${escapeXml(theme.hole)}" opacity=".28"/>${i === game.target ? `<circle cx="${p.x}" cy="${p.y}" r="27" fill="none" stroke="${escapeXml(theme.accent)}" stroke-width="2" stroke-dasharray="3 4"/>` : ""}${filled ? `<circle cx="${p.x}" cy="${p.y + 2}" r="19" fill="${escapeXml(theme.edge)}"/><circle cx="${p.x}" cy="${p.y - 1}" r="19" fill="${escapeXml(theme.peg)}"/><circle cx="${p.x - 5}" cy="${p.y - 7}" r="5" fill="white" opacity=".18"/>` : ""}${i === options.selected ? `<circle cx="${p.x}" cy="${p.y}" r="25" fill="none" stroke="${escapeXml(theme.accent)}" stroke-width="4"/>` : ""}</g>`;
-    })
-    .join("");
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${bounds.width} ${bounds.height}" role="img" aria-label="${escapeXml(options.title ?? "Peg solitaire")}"><rect x="3" y="3" width="${bounds.width - 6}" height="${bounds.height - 6}" rx="16" fill="${escapeXml(theme.board)}" stroke="#a98954" stroke-width="6"/>${cells}</svg>`;
+  const points = pointsOf(game);
+  const { width, height } = boundsOfPoints(points);
+  const cells = points.map((point, i) => cellSvg(point, i, game, theme, options.selected)).join("");
+  const title = escapeXml(options.title ?? "Peg solitaire");
+  const frame = `<rect x="${FRAME.inset}" y="${FRAME.inset}" width="${width - 2 * FRAME.inset}" height="${height - 2 * FRAME.inset}" rx="${FRAME.radius}" fill="${escapeXml(theme.board)}" stroke="${FRAME.colour}" stroke-width="${FRAME.stroke}"/>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="${title}">${frame}${cells}</svg>`;
+}
+
+/** One hole: the hole itself, the target ring, the peg and the selection ring, each only where it applies. */
+function cellSvg(point: Point, cell: number, game: Game, theme: Theme, selected: number | null | undefined): string {
+  const { x, y } = point;
+  const ring = (radius: number, width: number, dash = "") =>
+    `<circle cx="${x}" cy="${y}" r="${radius}" fill="none" stroke="${escapeXml(theme.accent)}" stroke-width="${width}"${dash}/>`;
+  const hole = `<circle cx="${x}" cy="${y}" r="${HOLE_RADIUS}" fill="${escapeXml(theme.hole)}" opacity=".28"/>`;
+  const target = cell === game.target ? ring(TARGET_RING_RADIUS, 2, ` stroke-dasharray="3 4"`) : "";
+  const peg = game.pegs[cell]
+    ? `<circle cx="${x}" cy="${y + 2}" r="${PEG_RADIUS}" fill="${escapeXml(theme.edge)}"/>` +
+      `<circle cx="${x}" cy="${y - 1}" r="${PEG_RADIUS}" fill="${escapeXml(theme.peg)}"/>` +
+      `<circle cx="${x - 5}" cy="${y - 7}" r="${PEG_SHINE_RADIUS}" fill="white" opacity=".18"/>`
+    : "";
+  const selection = cell === selected ? ring(SELECTED_RING_RADIUS, 4) : "";
+  return `<g data-cell="${cell}">${hole}${target}${peg}${selection}</g>`;
 }

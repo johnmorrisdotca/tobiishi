@@ -105,6 +105,20 @@ const SHAPE_NOTES: Record<Shape, [string, string]> = {
     "5 × 9の縦長盤。縦横に飛び越え、目印の穴に石を1つ残します。",
   ],
 };
+const PLAYER_STYLE = [
+  ".tobiishi{font:16px/1.5 var(--font,system-ui,sans-serif);color:inherit;max-width:600px;margin:auto}",
+  ".tobiishi *{box-sizing:border-box}",
+  ".tobiishi button,.tobiishi select{font:inherit;border:1px solid var(--rule,#ddd6c6);border-radius:12px;background:var(--surface,#fbf8f1);color:var(--ink,#1f2320);padding:8px 12px;min-height:44px}",
+  ".tobiishi button:focus-visible,.tobiishi select:focus-visible{outline:3px solid var(--accent,#b5452c);outline-offset:3px}",
+  ".tobiishi .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}",
+  ".tobiishi .board{position:relative;width:100%;touch-action:manipulation}",
+  ".tobiishi svg{display:block;width:100%;height:auto}",
+  ".tobiishi .cell{position:absolute;border:0;background:transparent;padding:0;border-radius:50%;min-height:0;aspect-ratio:1}",
+  ".tobiishi .cell.legal{box-shadow:inset 0 0 0 3px var(--accent,#b5452c)}",
+  ".tobiishi h2{font-weight:500;margin:0}",
+  ".tobiishi .status{min-height:48px}",
+  ".tobiishi [disabled]{opacity:.45}",
+].join("");
 /**
  * Mount one independent player. The host owns persistence through onChange and setGame.
  * @param host - The element that owns this player and its controls.
@@ -179,7 +193,7 @@ export function mount(host: HTMLElement, options: MountOptions = {}): Player {
     root.replaceChildren();
     current.settingsHost?.replaceChildren();
     const style = document.createElement("style");
-    style.textContent = `.tobiishi{font:16px/1.5 var(--font,system-ui,sans-serif);color:inherit;max-width:600px;margin:auto}.tobiishi *{box-sizing:border-box}.tobiishi button,.tobiishi select{font:inherit;border:1px solid var(--rule,#ddd6c6);border-radius:12px;background:var(--surface,#fbf8f1);color:var(--ink,#1f2320);padding:8px 12px;min-height:44px}.tobiishi button:focus-visible,.tobiishi select:focus-visible{outline:3px solid var(--accent,#b5452c);outline-offset:3px}.tobiishi .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}.tobiishi .board{position:relative;width:100%;touch-action:manipulation}.tobiishi svg{display:block;width:100%;height:auto}.tobiishi .cell{position:absolute;border:0;background:transparent;padding:0;border-radius:50%;min-height:0;aspect-ratio:1}.tobiishi .cell.legal{box-shadow:inset 0 0 0 3px var(--accent,#b5452c)}.tobiishi h2{font-weight:500;margin:0}.tobiishi .status{min-height:48px}.tobiishi [disabled]{opacity:.45}`;
+    style.textContent = PLAYER_STYLE;
     root.append(style);
     if (!current.justBoard) {
       const heading = document.createElement("h2");
