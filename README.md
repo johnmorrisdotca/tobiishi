@@ -842,7 +842,7 @@ Bug reports and pull requests are welcome in the [issues](https://github.com/joh
 
 ## Changes
 
-Every release is written up in [CHANGELOG.md](./CHANGELOG.md). The latest, 0.3.0, adds the game as an element with the standard embed attributes, the shared embed builder, and the documentation site with a checked example for every export.
+Every release is written up in [CHANGELOG.md](./CHANGELOG.md). The latest release, 0.3.1, changes nothing a player sees.
 
 ## Licence
 
