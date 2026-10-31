@@ -1,5 +1,5 @@
-import { boardOf, type Board, type Cell, type Jump, type Shape } from "./board.js";
-import { newGame, type Game } from "./game.js";
+import { type Board, boardOf, type Cell, type Jump, type Shape } from "./board.js";
+import { type Game, newGame } from "./game.js";
 /** A starting position paired with its complete legal witness and seed.
  *
  * @example
@@ -126,7 +126,7 @@ export function classicEnglish(): Challenge {
 export function challengeOf(shape: Shape, seed = "tobiishi", jumps = 12, goal?: Cell): Challenge {
   const board = boardOf(shape);
   if (goal === undefined) return generate(board, seed, jumps);
-  const goalIndex = board.cells.findIndex(cell => cell.x === goal.x && cell.y === goal.y);
+  const goalIndex = board.cells.findIndex((cell) => cell.x === goal.x && cell.y === goal.y);
   if (goalIndex < 0) throw new RangeError("The goal is not a hole on this board");
   return generate(board, seed, jumps, goalIndex);
 }

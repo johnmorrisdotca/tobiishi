@@ -15,7 +15,14 @@ const choose = (shape, material) => async (page) => {
 };
 
 /** One board, cropped to the board. */
-const board = (subject, shape, material) => ({ subject, views: ["desk"], scale: 2, ready: `${BOARD} svg`, target: BOARD, prepare: choose(shape, material) });
+const board = (subject, shape, material) => ({
+  subject,
+  views: ["desk"],
+  scale: 2,
+  ready: `${BOARD} svg`,
+  target: BOARD,
+  prepare: choose(shape, material),
+});
 
 await takePictures({
   shots: [
@@ -29,7 +36,9 @@ await takePictures({
         if (view === "phone") {
           await page.getByRole("button", { name: "日本語", exact: true }).click();
           await choose("heart")(page);
-          await page.locator(".game-screen").evaluate((element) => window.scrollTo(0, element.getBoundingClientRect().top + window.scrollY - 8));
+          await page
+            .locator(".game-screen")
+            .evaluate((element) => window.scrollTo(0, element.getBoundingClientRect().top + window.scrollY - 8));
         } else {
           const move = await page.evaluate(async () => (await import("/dist/index.js")).classicEnglish().answer[0]);
           await page.locator(`.cell[data-cell="${move.from}"]`).click();

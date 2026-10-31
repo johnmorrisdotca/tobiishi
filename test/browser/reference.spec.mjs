@@ -1,18 +1,22 @@
-import { test, expect } from "@playwright/test";
-import { readFileSync, existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import process from "node:process";
+import { expect, test } from "@playwright/test";
+
 const pkg = JSON.parse(readFileSync("package.json", "utf8"));
 const id = pkg.name.split("/")[1];
 const site = join(process.cwd(), id === "jirai" ? "docs" : "site");
 test("the API reference covers every entry and fits a phone", async ({ page }) => {
   const errors = [];
-  page.on("pageerror", error => errors.push(String(error)));
-  await page.route("http://reference.test/**", route => {
+  page.on("pageerror", (error) => errors.push(String(error)));
+  await page.route("http://reference.test/**", (route) => {
     const pathname = new URL(route.request().url()).pathname;
     const file = join(site, pathname.endsWith("/") ? `${pathname}index.html` : pathname);
     if (!existsSync(file)) return route.fulfill({ status: 404 });
-    return route.fulfill({ body: readFileSync(file), contentType: file.endsWith(".html") ? "text/html" : file.endsWith(".js") ? "text/javascript" : "text/css" });
+    return route.fulfill({
+      body: readFileSync(file),
+      contentType: file.endsWith(".html") ? "text/html" : file.endsWith(".js") ? "text/javascript" : "text/css",
+    });
   });
   for (const width of [1280, 390]) {
     await page.setViewportSize({ width, height: 844 });

@@ -1,4 +1,5 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
+
 test("classic play, undo, keyboard, persistence callback and reset", async ({ page }) => {
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
@@ -68,7 +69,7 @@ test("new challenges and keyboard selection work", async ({ page }) => {
 
 test("named packs select a fixed goal, show its witness and restore assisted progress", async ({ page }) => {
   const errors = [];
-  page.on("pageerror", error => errors.push(error.message));
+  page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
   await page.locator("#challenge-pack").selectOption("wide");
   await page.locator("#challenge-difficulty").selectOption("easy");
@@ -79,7 +80,11 @@ test("named packs select a fixed goal, show its witness and restore assisted pro
   const selected = await page.evaluate(async () => {
     const api = await import("/dist/index.js");
     const challenge = api.generateTobiishiChallenge("wide", "north", "easy");
-    return { target: window.tobiishi.getGame().target, expected: challenge.game.target, jumps: challenge.answer.length };
+    return {
+      target: window.tobiishi.getGame().target,
+      expected: challenge.game.target,
+      jumps: challenge.answer.length,
+    };
   });
   expect(selected.target).toBe(selected.expected);
   expect(selected.jumps).toBe(3);

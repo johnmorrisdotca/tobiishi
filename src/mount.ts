@@ -1,20 +1,20 @@
 import { SHAPES, type Shape } from "./board.js";
-import { classicEnglish, classicTriangle, challengeOf, generate, type Challenge } from "./generate.js";
+import { boundsOf, draw, MATERIALS, type Material, pointOf, type Theme } from "./draw.js";
 import {
-  markHelped,
+  type Game,
   gameCode,
-  jumpAt,
-  undo,
-  restart,
-  pegCount,
-  legalJumps,
   isGameSolved,
   isGameStuck,
-  type Game,
+  jumpAt,
+  legalJumps,
+  markHelped,
+  pegCount,
+  restart,
+  undo,
 } from "./game.js";
-import { draw, boundsOf, pointOf, MATERIALS, type Material, type Theme } from "./draw.js";
-import { STRINGS, type Language } from "./strings.js";
+import { type Challenge, challengeOf, classicEnglish, classicTriangle, generate } from "./generate.js";
 import { solve } from "./solve.js";
+import { type Language, STRINGS } from "./strings.js";
 /** Initial puzzle, display choices, optional settings host, and persistence callback.
  *
  * @example
@@ -50,7 +50,12 @@ export type MountOptions = {
  * console.log(typeof setJapanese);
  * ```
  */
-export type Player = { getGame: () => Game; setGame: (game: Game) => void; set: (changes: Pick<MountOptions, "language" | "material" | "theme" | "justBoard">) => void; destroy: () => void };
+export type Player = {
+  getGame: () => Game;
+  setGame: (game: Game) => void;
+  set: (changes: Pick<MountOptions, "language" | "material" | "theme" | "justBoard">) => void;
+  destroy: () => void;
+};
 const LABELS: Record<Shape, [string, string]> = {
   english: ["English cross", "イギリス盤"],
   triangle: ["Triangle", "三角盤"],
@@ -241,7 +246,10 @@ export function mount(host: HTMLElement, options: MountOptions = {}): Player {
       });
       controls.append(materials);
       if (options.settingsHost) {
-        for (const [field, name] of [[selector, text.change], [materials, text.material]] as const) {
+        for (const [field, name] of [
+          [selector, text.change],
+          [materials, text.material],
+        ] as const) {
           const label = document.createElement("label");
           const caption = document.createElement("span");
           caption.textContent = name;
@@ -381,7 +389,8 @@ export function mount(host: HTMLElement, options: MountOptions = {}): Player {
     }
     if (hadFocus) {
       const node = focusedAction
-        ? (options.settingsHost?.querySelector<HTMLElement>(`[data-action="${focusedAction}"]`) ?? root.querySelector<HTMLElement>(`[data-action="${focusedAction}"]`))
+        ? (options.settingsHost?.querySelector<HTMLElement>(`[data-action="${focusedAction}"]`) ??
+          root.querySelector<HTMLElement>(`[data-action="${focusedAction}"]`))
         : root.querySelector<HTMLElement>(`[data-cell="${focusCell}"]`);
       node?.focus();
     }
@@ -395,7 +404,13 @@ export function mount(host: HTMLElement, options: MountOptions = {}): Player {
       announce(next);
       render();
     },
-    set: (changes) => { options = { ...options, ...changes }; material = changes.material ?? material; lang = changes.language ?? lang; text = STRINGS[lang]; render(); },
+    set: (changes) => {
+      options = { ...options, ...changes };
+      material = changes.material ?? material;
+      lang = changes.language ?? lang;
+      text = STRINGS[lang];
+      render();
+    },
     destroy: () => {
       destroyed = true;
       options.settingsHost?.replaceChildren();

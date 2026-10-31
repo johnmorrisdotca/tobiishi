@@ -1,29 +1,30 @@
-import { test } from "node:test";
 import assert from "node:assert/strict";
+import { test } from "node:test";
+import { boundsOf, draw, pointOf } from "../dist/draw-entry.js";
 import {
-  SHAPES,
-  SQUARE_STEPS,
-  TRIANGLE_STEPS,
-  rectangleBoard,
   boardOf,
-  makeBoard,
-  newGame,
-  legalJumps,
-  jumpAt,
-  undo,
-  restart,
-  pegCount,
-  isGameSolved,
-  isGameStuck,
-  markHelped,
   classicEnglish,
   classicTriangle,
-  generate,
-  solve,
   gameCode,
   gameFromCode,
+  generate,
+  isGameSolved,
+  isGameStuck,
+  jumpAt,
+  legalJumps,
+  makeBoard,
+  markHelped,
+  newGame,
+  pegCount,
+  rectangleBoard,
+  restart,
+  SHAPES,
+  SQUARE_STEPS,
+  solve,
+  TRIANGLE_STEPS,
+  undo,
 } from "../dist/index.js";
-import { draw, boundsOf, pointOf } from "../dist/draw-entry.js";
+
 test("board geometry and exact hole counts", () => {
   for (const [shape, n] of [
     ["english", 33],

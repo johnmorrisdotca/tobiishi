@@ -1,5 +1,5 @@
-import { jumpAt, isGameSolved, legalJumps, type Game } from "./game.js";
 import type { Jump } from "./board.js";
+import { type Game, isGameSolved, jumpAt, legalJumps } from "./game.js";
 /** Bounded search result; `limit` distinguishes unfinished search from proof.
  *
  * @example

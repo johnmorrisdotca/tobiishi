@@ -1,6 +1,7 @@
-import { createServer } from "node:http";
 import { readFile } from "node:fs/promises";
-import { resolve, extname } from "node:path";
+import { createServer } from "node:http";
+import { extname, resolve } from "node:path";
+
 const root = resolve(".");
 createServer(async (req, res) => {
   try {
@@ -10,13 +11,20 @@ createServer(async (req, res) => {
       "." +
         (path === "/"
           ? "/demo/index.html"
-          : (path.startsWith("/embed/") || path.startsWith("/docs/") || ["/llms.txt", "/llms-full.txt"].includes(path))
+          : path.startsWith("/embed/") || path.startsWith("/docs/") || ["/llms.txt", "/llms-full.txt"].includes(path)
             ? "/site" + (path.endsWith("/") ? path + "index.html" : path)
-          : ["/builder.html", "/builder.js", "/builder.css", "/family-embed-builder.js", "/api.html", "/api.css"].includes(path)
-            ? "/site" + path
-          : ["/family.css", "/tobiishi.css", "/demo.js"].includes(path)
-            ? "/demo" + path
-            : path),
+            : [
+                  "/builder.html",
+                  "/builder.js",
+                  "/builder.css",
+                  "/family-embed-builder.js",
+                  "/api.html",
+                  "/api.css",
+                ].includes(path)
+              ? "/site" + path
+              : ["/family.css", "/tobiishi.css", "/demo.js"].includes(path)
+                ? "/demo" + path
+                : path),
     );
     if (!file.startsWith(root + "/")) throw Error();
     res.setHeader(

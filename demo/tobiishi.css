@@ -1,18 +1,112 @@
 /* Tobiishi's own layout, after the unchanged family.css. */
-:root{--intro-room:8rem;--intro-room-wide:5rem}
-.layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:24px;align-items:start}
-aside h2,.panel-head h2{font-size:1.05rem;margin:0 0 12px}
-#settings .controls{display:block}#settings label,.challenge-pack label{display:flex;flex-direction:column;gap:6px;font-size:.85rem;margin-bottom:12px;color:var(--muted)}
-#settings select,.challenge-pack select{width:100%;min-width:0;box-sizing:border-box}.challenge-pack select{border:1px solid var(--rule);border-radius:12px;background:var(--surface);color:var(--ink);padding:8px 12px;min-height:44px}.challenge-pack h3{font-size:.95rem;margin:0 0 10px}.challenge-pack{margin-bottom:16px}.challenge-pack h3,.challenge-pack label,.challenge-pack p{flex:1 1 100%;width:100%;box-sizing:border-box}.challenge-pack .fam-button{width:100%}aside p{font-size:.85rem;color:var(--muted);line-height:1.5}
-.game-screen .tobiishi{max-width:600px;color:var(--felt-ink)}
-.game-screen .tobiishi h2,.game-screen .tobiishi .instructions{display:none}
-.game-screen .tobiishi .board{margin:0}
-.game-screen .tobiishi .controls{margin:12px 0 0}
-.game-screen .tobiishi .controls button{border-radius:999px;background:rgba(0,0,0,.28);color:var(--felt-ink);border-color:rgba(255,255,255,.35);font-size:.85rem}
-.game-screen .tobiishi .status{min-height:1.5em;margin:10px 0;font-size:.9rem}
-@media(max-width:700px){.layout{grid-template-columns:1fr}.game-screen{padding:14px 10px}}
+:root {
+  --intro-room: 8rem;
+  --intro-room-wide: 5rem;
+}
+.layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+aside h2,
+.panel-head h2 {
+  font-size: 1.05rem;
+  margin: 0 0 12px;
+}
+#settings .controls {
+  display: block;
+}
+#settings label,
+.challenge-pack label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+  color: var(--muted);
+}
+#settings select,
+.challenge-pack select {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.challenge-pack select {
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--ink);
+  padding: 8px 12px;
+  min-height: 44px;
+}
+.challenge-pack h3 {
+  font-size: 0.95rem;
+  margin: 0 0 10px;
+}
+.challenge-pack {
+  margin-bottom: 16px;
+}
+.challenge-pack h3,
+.challenge-pack label,
+.challenge-pack p {
+  flex: 1 1 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+.challenge-pack .fam-button {
+  width: 100%;
+}
+aside p {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.game-screen .tobiishi {
+  max-width: 600px;
+  color: var(--felt-ink);
+}
+.game-screen .tobiishi h2,
+.game-screen .tobiishi .instructions {
+  display: none;
+}
+.game-screen .tobiishi .board {
+  margin: 0;
+}
+.game-screen .tobiishi .controls {
+  margin: 12px 0 0;
+}
+.game-screen .tobiishi .controls button {
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.28);
+  color: var(--felt-ink);
+  border-color: rgba(255, 255, 255, 0.35);
+  font-size: 0.85rem;
+}
+.game-screen .tobiishi .status {
+  min-height: 1.5em;
+  margin: 10px 0;
+  font-size: 0.9rem;
+}
+@media (max-width: 700px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .game-screen {
+    padding: 14px 10px;
+  }
+}
 
-aside{padding:16px;border:1px solid var(--rule);border-radius:16px;background:var(--surface)}
+aside {
+  padding: 16px;
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  background: var(--surface);
+}
 
 /* Keep navigation width stable across languages. */
-header nav a[data-say="pageDocs"] { inline-size: 8rem; justify-content: center; flex: none; }
+header nav a[data-say="pageDocs"] {
+  inline-size: 8rem;
+  justify-content: center;
+  flex: none;
+}

@@ -1,8 +1,8 @@
 export * from "./board.js";
-export * from "./game.js";
-export * from "./solve.js";
-export * from "./generate.js";
 export * from "./challenges.js";
+export * from "./game.js";
+export * from "./generate.js";
+export * from "./solve.js";
 /** Current package API version.
  *
  * @example

@@ -1,4 +1,4 @@
-import { makeBoard, type Board, type Jump } from "./board.js";
+import { type Board, type Jump, makeBoard } from "./board.js";
 /** Immutable peg position, target, move history, and assistance marker.
  *
  * @example
