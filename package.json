@@ -51,7 +51,7 @@
     "lint": "biome check .",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "pnpm build && node --test test/*.test.mjs && vitest run",
-    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm check:presentation",
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm check:presentation && pnpm check:size",
     "test:browser": "pnpm site && node scripts/docs-site.mjs build && playwright test",
     "test:demo": "pnpm site && node scripts/docs-site.mjs build && playwright test",
     "demo": "pnpm build && node scripts/site.mjs && node scripts/docs-site.mjs build && node scripts/serve.mjs",
@@ -65,7 +65,8 @@
     "docs:site": "pnpm build && node scripts/docs-site.mjs build",
     "docs:check": "pnpm build && node scripts/docs-site.mjs check",
     "size": "node scripts/docs-site.mjs size",
-    "format": "biome check --write ."
+    "format": "biome check --write .",
+    "check:size": "node scripts/check-size.mjs"
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.4",
