@@ -1,12 +1,11 @@
 import { boardOf, SHAPES, type Shape } from "./board.js";
 import { MATERIALS, type Material, type Theme } from "./draw.js";
+import { embedColorScheme, embedWidth, isOn, writeAttribute } from "./embed-attributes.js";
 import { type Game, gameCode } from "./game.js";
 import { generate } from "./generate.js";
 import { type MountOptions, mount, type Player } from "./mount.js";
 
 const ElementBase = typeof HTMLElement === "undefined" ? (class {} as typeof HTMLElement) : HTMLElement;
-const isOn = (value: string | null, fallback = false): boolean =>
-  value === null ? fallback : !["false", "off", "no", "0"].includes(value.trim().toLowerCase());
 const EMBED_STYLE = [
   "[data-tobiishi-embed]{font:16px/1.5 system-ui,sans-serif;color:light-dark(#1f2320,#ece8dc);--ink:light-dark(#1f2320,#ece8dc);--surface:light-dark(#fbf8f1,#1d201e);--rule:light-dark(#ddd6c6,#3a3d38);--accent:light-dark(#b5452c,#ff8a6b)}",
   "[data-tobiishi-embed] .tobiishi select{max-width:100%;min-width:0}",
@@ -137,102 +136,87 @@ export class TobiishiGame extends ElementBase {
   attributeChangedCallback(): void {
     if (this.isConnected) this.#refresh();
   }
-  #write(name: string, value: unknown): void {
-    if (value === null || value === undefined) this.removeAttribute(name);
-    else this.setAttribute(name, String(value));
-  }
   /** The `shape` attribute, reflected. */
   get shape(): string | null {
     return this.getAttribute("shape");
   }
   set shape(value: string | number | boolean | null | undefined) {
-    this.#write("shape", value);
+    writeAttribute(this, "shape", value);
   }
   /** The `seed` attribute, reflected. */
   get seed(): string | null {
     return this.getAttribute("seed");
   }
   set seed(value: string | number | boolean | null | undefined) {
-    this.#write("seed", value);
+    writeAttribute(this, "seed", value);
   }
   /** The `language` attribute, reflected. */
   get language(): string | null {
     return this.getAttribute("language");
   }
   set language(value: string | number | boolean | null | undefined) {
-    this.#write("language", value);
+    writeAttribute(this, "language", value);
   }
   /** The `material` attribute, reflected. */
   get material(): string | null {
     return this.getAttribute("material");
   }
   set material(value: string | number | boolean | null | undefined) {
-    this.#write("material", value);
+    writeAttribute(this, "material", value);
   }
   /** The `just-board` attribute, reflected. */
   get justBoard(): string | null {
     return this.getAttribute("just-board");
   }
   set justBoard(value: string | number | boolean | null | undefined) {
-    this.#write("just-board", value);
+    writeAttribute(this, "just-board", value);
   }
   /** The `challenge-jumps` attribute, reflected. */
   get challengeJumps(): string | null {
     return this.getAttribute("challenge-jumps");
   }
   set challengeJumps(value: string | number | boolean | null | undefined) {
-    this.#write("challenge-jumps", value);
+    writeAttribute(this, "challenge-jumps", value);
   }
   /** The `theme` attribute, reflected. */
   get theme(): string | null {
     return this.getAttribute("theme");
   }
   set theme(value: string | number | boolean | null | undefined) {
-    this.#write("theme", value);
+    writeAttribute(this, "theme", value);
   }
   /** The `controls` attribute, reflected. */
   get controls(): string | null {
     return this.getAttribute("controls");
   }
   set controls(value: string | number | boolean | null | undefined) {
-    this.#write("controls", value);
+    writeAttribute(this, "controls", value);
   }
   /** The `size` attribute, reflected. */
   get size(): string | null {
     return this.getAttribute("size");
   }
   set size(value: string | number | boolean | null | undefined) {
-    this.#write("size", value);
+    writeAttribute(this, "size", value);
   }
   /** The `width` attribute, reflected. */
   get width(): string | null {
     return this.getAttribute("width");
   }
   set width(value: string | number | boolean | null | undefined) {
-    this.#write("width", value);
+    writeAttribute(this, "width", value);
   }
   /** The `label` attribute, reflected. */
   get label(): string | null {
     return this.getAttribute("label");
   }
   set label(value: string | number | boolean | null | undefined) {
-    this.#write("label", value);
+    writeAttribute(this, "label", value);
   }
   #frame(): void {
     this.style.display = "block";
     this.style.maxWidth = "100%";
-    const width = Number(this.getAttribute("width"));
-    const size = this.getAttribute("size");
-    const pixels =
-      this.hasAttribute("width") && width > 0 && Number.isFinite(width)
-        ? Math.min(width, 2000)
-        : size === "small"
-          ? 320
-          : size === "medium"
-            ? 480
-            : size === "large"
-              ? 640
-              : null;
+    const pixels = embedWidth(this.getAttribute("width"), this.getAttribute("size"));
     if (pixels !== null) {
       if (!this.#widthOwned) this.#widthBefore = this.style.width;
       this.#widthOwned = true;
@@ -241,8 +225,7 @@ export class TobiishiGame extends ElementBase {
       this.style.width = this.#widthBefore ?? "";
       this.#widthOwned = false;
     }
-    const theme = this.getAttribute("theme");
-    this.style.colorScheme = theme === "light" || theme === "dark" ? theme : "light dark";
+    this.style.colorScheme = embedColorScheme(this.getAttribute("theme"));
     this.setAttribute("data-tobiishi-embed", "");
     const root = this.getRootNode();
     const target: ParentNode =
