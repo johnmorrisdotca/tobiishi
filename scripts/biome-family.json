@@ -6,6 +6,8 @@
       "**",
       "!**/*.md",
       "!**/*.html",
+      "!**/*.yml",
+      "!**/*.yaml",
       "!docs",
       "!**/*.data.ts",
       "!**/tsconfig*.json",
