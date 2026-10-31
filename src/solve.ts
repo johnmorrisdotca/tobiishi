@@ -30,8 +30,8 @@ export type Solution = { status: "solved" | "impossible" | "limit"; jumps: Jump[
  */
 export function solve(game: Game, maxNodes = 100000): Solution {
   if (!Number.isSafeInteger(maxNodes) || maxNodes < 1) throw new RangeError("Invalid search budget");
-  let visited = 0,
-    limited = false;
+  let visited = 0;
+  let limited = false;
   const dead = new Set<string>();
   function visit(position: Game): Jump[] | null {
     if (isGameSolved(position)) return [];

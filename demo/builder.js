@@ -166,14 +166,14 @@ const leftOut = {
 };
 let mounted;
 const page = globalThis.familyLanguage({
-    id: "tobiishi",
-    words,
-    onChange: () => {
-      docsLink();
-      mounted?.draw();
-    },
-  }),
-  heights = {};
+  id: "tobiishi",
+  words,
+  onChange: () => {
+    docsLink();
+    mounted?.draw();
+  },
+});
+const heights = {};
 const key = (settings) => JSON.stringify(settings);
 function problem(settings) {
   const seed = String(settings.seed ?? "tobiishi");

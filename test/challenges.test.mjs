@@ -18,7 +18,7 @@ test("every named goal and difficulty has a complete legal witness", () => {
         );
         assert.equal(challenge.answer.length, jumpCount);
         assert.equal(pegCount(challenge.game), jumpCount + 1);
-        let pegs = [...challenge.game.pegs];
+        const pegs = [...challenge.game.pegs];
         for (const jump of challenge.answer) {
           assert.equal(
             challenge.game.board.jumps.some(

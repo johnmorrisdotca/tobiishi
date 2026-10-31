@@ -135,8 +135,8 @@ export function makeBoard(name: string, cells: readonly Cell[], lattice: Board["
   const jumps: Jump[] = [];
   cells.forEach(({ x, y }, from) => {
     for (const [dx, dy] of lattice === "triangle" ? TRIANGLE_STEPS : SQUARE_STEPS) {
-      const over = keys.get(`${x + dx},${y + dy}`),
-        to = keys.get(`${x + dx * 2},${y + dy * 2}`);
+      const over = keys.get(`${x + dx},${y + dy}`);
+      const to = keys.get(`${x + dx * 2},${y + dy * 2}`);
       if (over !== undefined && to !== undefined) jumps.push(Object.freeze({ from, over, to }));
     }
   });
@@ -210,11 +210,11 @@ export function boardOf(shape: Shape = "english"): Board {
             "..##...##..",
             ".###...###.",
           ];
-    rows.forEach((row, y) =>
+    rows.forEach((row, y) => {
       [...row].forEach((cell, x) => {
         if (cell === "#") cells.push({ x, y });
-      }),
-    );
+      });
+    });
     return makeBoard(shape, cells);
   }
   if (shape === "hexagon") {

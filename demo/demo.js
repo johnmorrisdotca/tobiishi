@@ -86,7 +86,7 @@ function populateGoals(language) {
     ...pack.goals.map((goal) => {
       const option = document.createElement("option");
       option.value = goal.id;
-      option.textContent = goal.names[language] + " · " + String.fromCharCode(97 + goal.x) + (goal.y + 1);
+      option.textContent = `${goal.names[language]} · ${String.fromCharCode(97 + goal.x)}${goal.y + 1}`;
       return option;
     }),
   );
@@ -155,7 +155,7 @@ function playSelectedChallenge() {
       difficulty: challenge.difficulty,
       lang: languageState.lang,
     });
-    history.replaceState(history.state, "", location.pathname + "?" + query);
+    history.replaceState(history.state, "", `${location.pathname}?${query}`);
   } catch {
     status.textContent = WORDS[languageState.lang].freePlay;
   }

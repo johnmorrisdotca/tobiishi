@@ -183,11 +183,9 @@ export function generateTobiishiChallenge(
   goalId: string,
   difficulty: ChallengeDifficulty,
 ): GoalChallenge {
-  const pack = Object.prototype.hasOwnProperty.call(TOBIISHI_CHALLENGE_PACKS, packKey)
-    ? TOBIISHI_CHALLENGE_PACKS[packKey]
-    : undefined;
+  const pack = Object.hasOwn(TOBIISHI_CHALLENGE_PACKS, packKey) ? TOBIISHI_CHALLENGE_PACKS[packKey] : undefined;
   const goalHole = pack?.goals.find((item) => item.id === goalId);
-  if (!pack || !goalHole || !Object.prototype.hasOwnProperty.call(DIFFICULTY_JUMPS, difficulty)) {
+  if (!pack || !goalHole || !Object.hasOwn(DIFFICULTY_JUMPS, difficulty)) {
     throw new RangeError("Unknown Tobiishi challenge");
   }
   const board = boardOf(pack.shape);

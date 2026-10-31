@@ -56,8 +56,8 @@ export function generate(board: Board, seed: string, jumps = 12, goal?: number):
   let best: Challenge | null = null;
   for (let attempt = 0; attempt < 160; attempt += 1) {
     const target = goal ?? Math.floor(random() * board.cells.length);
-    const pegs = board.cells.map((_, i) => i === target),
-      answer: Jump[] = [];
+    const pegs = board.cells.map((_, i) => i === target);
+    const answer: Jump[] = [];
     while (answer.length < jumps) {
       const available = board.jumps.filter((j) => !pegs[j.from] && !pegs[j.over] && pegs[j.to]);
       const jump = available[Math.floor(random() * available.length)];
@@ -85,8 +85,8 @@ export function generate(board: Board, seed: string, jumps = 12, goal?: number):
  * ```
  */
 export function classicEnglish(): Challenge {
-  const board = boardOf("english"),
-    target = board.cells.findIndex((c) => c.x === 3 && c.y === 3);
+  const board = boardOf("english");
+  const target = board.cells.findIndex((c) => c.x === 3 && c.y === 3);
   const paths =
     "b4-d4 c6-c4 a5-c5 d5-b5 f5-d5 e7-e5 e4-e6 c7-e7-e5 c3-c5 c1-c3 e2-e4-e6-c6-c4-c2 a3-a5-c5-e5 g3-e3 d3-f3 g5-g3-e3 e1-c1-c3 b3-d3-f3-f5-d5-d3 d2-d4";
   const index = (s: string) => board.cells.findIndex((c) => c.x === s.charCodeAt(0) - 97 && c.y === Number(s[1]) - 1);

@@ -189,8 +189,8 @@ test("shaped outlines are connected, have usable jumps, and fit their SVG bounds
     const board = boardOf(shape);
     assert.equal(board.cells.length, counts[shape]);
     const steps = board.lattice === "triangle" ? TRIANGLE_STEPS : SQUARE_STEPS;
-    const reached = new Set([0]),
-      queue = [0];
+    const reached = new Set([0]);
+    const queue = [0];
     while (queue.length) {
       const cell = board.cells[queue.shift()];
       for (const [dx, dy] of steps) {
@@ -204,8 +204,8 @@ test("shaped outlines are connected, have usable jumps, and fit their SVG bounds
     assert.equal(reached.size, board.cells.length, `${shape} must have no disconnected holes`);
     const usable = new Set(board.jumps.flatMap((j) => [j.from, j.over, j.to]));
     assert.equal(usable.size, board.cells.length, `${shape} must have no hole absent from every jump`);
-    const game = generate(board, "bounds", 12).game,
-      bounds = boundsOf(game);
+    const game = generate(board, "bounds", 12).game;
+    const bounds = boundsOf(game);
     for (let cell = 0; cell < board.cells.length; cell++) {
       const point = pointOf(game, cell);
       assert.ok(point.x >= 24 && point.y >= 24 && point.x + 24 <= bounds.width && point.y + 24 <= bounds.height);

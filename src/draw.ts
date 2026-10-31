@@ -64,8 +64,8 @@ export const THEMES: Record<Material, Theme> = {
 export function pointOf(game: Game, cell: number): { x: number; y: number } {
   const c = game.board.cells[cell]!;
   const xs = game.board.cells.map((p) => (game.board.lattice === "triangle" ? p.x - p.y / 2 : p.x));
-  const minX = Math.min(...xs),
-    minY = Math.min(...game.board.cells.map((p) => p.y));
+  const minX = Math.min(...xs);
+  const minY = Math.min(...game.board.cells.map((p) => p.y));
   return { x: (xs[cell]! - minX) * 60 + 45, y: (c.y - minY) * (game.board.lattice === "triangle" ? 52 : 60) + 45 };
 }
 /** Returns the SVG view box size for the board.
@@ -124,12 +124,12 @@ export function draw(
   game: Game,
   options: { material?: Material; theme?: Partial<Theme>; selected?: number | null; title?: string } = {},
 ): string {
-  const theme = { ...THEMES[options.material ?? "stone"], ...options.theme },
-    bounds = boundsOf(game);
+  const theme = { ...THEMES[options.material ?? "stone"], ...options.theme };
+  const bounds = boundsOf(game);
   const cells = game.board.cells
     .map((_, i) => {
-      const p = pointOf(game, i),
-        filled = game.pegs[i];
+      const p = pointOf(game, i);
+      const filled = game.pegs[i];
       return `<g data-cell="${i}"><circle cx="${p.x}" cy="${p.y}" r="24" fill="${escapeXml(theme.hole)}" opacity=".28"/>${i === game.target ? `<circle cx="${p.x}" cy="${p.y}" r="27" fill="none" stroke="${escapeXml(theme.accent)}" stroke-width="2" stroke-dasharray="3 4"/>` : ""}${filled ? `<circle cx="${p.x}" cy="${p.y + 2}" r="19" fill="${escapeXml(theme.edge)}"/><circle cx="${p.x}" cy="${p.y - 1}" r="19" fill="${escapeXml(theme.peg)}"/><circle cx="${p.x - 5}" cy="${p.y - 7}" r="5" fill="white" opacity=".18"/>` : ""}${i === options.selected ? `<circle cx="${p.x}" cy="${p.y}" r="25" fill="none" stroke="${escapeXml(theme.accent)}" stroke-width="4"/>` : ""}</g>`;
     })
     .join("");

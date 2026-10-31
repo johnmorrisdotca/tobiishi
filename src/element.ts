@@ -216,8 +216,8 @@ export class TobiishiGame extends ElementBase {
   #frame(): void {
     this.style.display = "block";
     this.style.maxWidth = "100%";
-    const width = Number(this.getAttribute("width")),
-      size = this.getAttribute("size");
+    const width = Number(this.getAttribute("width"));
+    const size = this.getAttribute("size");
     const pixels =
       this.hasAttribute("width") && width > 0 && Number.isFinite(width)
         ? Math.min(width, 2000)
@@ -239,9 +239,9 @@ export class TobiishiGame extends ElementBase {
     const theme = this.getAttribute("theme");
     this.style.colorScheme = theme === "light" || theme === "dark" ? theme : "light dark";
     this.setAttribute("data-tobiishi-embed", "");
-    const root = this.getRootNode(),
-      target: ParentNode =
-        typeof ShadowRoot !== "undefined" && root instanceof ShadowRoot ? root : this.ownerDocument.head;
+    const root = this.getRootNode();
+    const target: ParentNode =
+      typeof ShadowRoot !== "undefined" && root instanceof ShadowRoot ? root : this.ownerDocument.head;
     if (target.querySelector("style[data-tobiishi-embed-style]") === null) {
       const style = this.ownerDocument.createElement("style");
       style.setAttribute("data-tobiishi-embed-style", "");
@@ -309,8 +309,8 @@ export class TobiishiGame extends ElementBase {
             : "Use a whole challenge length from 1 to 100.",
         );
       const key = JSON.stringify([shape, seed, jumps, this.#options.game, this.#options.challenge]);
-      const look = this.#look(),
-        lookKey = JSON.stringify(look);
+      const look = this.#look();
+      const lookKey = JSON.stringify(look);
       if (key === this.#gameKey && this.#player !== null) {
         if (lookKey !== this.#lookKey) this.#player.set(look);
         this.#lookKey = lookKey;
@@ -358,8 +358,8 @@ export class TobiishiGame extends ElementBase {
       this.#player = null;
       this.#gameKey = "";
       this.#lookKey = "";
-      const message = error instanceof Error ? error.message : String(error),
-        status = this.ownerDocument.createElement("p");
+      const message = error instanceof Error ? error.message : String(error);
+      const status = this.ownerDocument.createElement("p");
       status.setAttribute("role", "status");
       status.textContent = message;
       this.replaceChildren(status);

@@ -21,8 +21,8 @@ test("native state and player identity survive properties and page language chan
   await expect(game.locator("svg")).toBeVisible();
   await game.evaluate(async (element) => {
     const { legalJumps, jumpAt } = await import("../dist/index.js");
-    const before = element.game,
-      jump = legalJumps(before)[0];
+    const before = element.game;
+    const jump = legalJumps(before)[0];
     element.setGame(jumpAt(before, jump.from, jump.to));
     globalThis.beforePlayer = element.player;
     globalThis.beforeGame = element.game;
@@ -69,12 +69,12 @@ test("custom tags emit the original game shape across shadow roots", async ({ pa
   await page.goto("/embed/");
   await expect(page.locator("svg")).toBeVisible();
   const result = await page.evaluate(async () => {
-    const { defineGame, defineTobiishi } = await import("../dist/element.js"),
-      { legalJumps, jumpAt } = await import("../dist/index.js");
+    const { defineGame, defineTobiishi } = await import("../dist/element.js");
+    const { legalJumps, jumpAt } = await import("../dist/index.js");
     defineGame("article-pegs");
     defineTobiishi("article-pegs");
-    const host = document.createElement("div"),
-      shadow = host.attachShadow({ mode: "open" });
+    const host = document.createElement("div");
+    const shadow = host.attachShadow({ mode: "open" });
     document.body.append(host);
     const game = document.createElement("article-pegs");
     game.size = "small";

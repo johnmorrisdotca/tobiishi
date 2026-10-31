@@ -12,7 +12,7 @@ createServer(async (req, res) => {
         (path === "/"
           ? "/demo/index.html"
           : path.startsWith("/embed/") || path.startsWith("/docs/") || ["/llms.txt", "/llms-full.txt"].includes(path)
-            ? "/site" + (path.endsWith("/") ? path + "index.html" : path)
+            ? `/site${path.endsWith("/") ? `${path}index.html` : path}`
             : [
                   "/builder.html",
                   "/builder.js",
@@ -21,12 +21,12 @@ createServer(async (req, res) => {
                   "/api.html",
                   "/api.css",
                 ].includes(path)
-              ? "/site" + path
+              ? `/site${path}`
               : ["/family.css", "/tobiishi.css", "/demo.js"].includes(path)
-                ? "/demo" + path
+                ? `/demo${path}`
                 : path),
     );
-    if (!file.startsWith(root + "/")) throw Error();
+    if (!file.startsWith(`${root}/`)) throw Error();
     res.setHeader(
       "Content-Type",
       { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml" }[extname(file)] ??
@@ -38,5 +38,5 @@ createServer(async (req, res) => {
     res.end("Not found");
   }
 }).listen(Number(process.env.PORT ?? 6901), "127.0.0.1", () =>
-  console.log("Tobiishi: http://127.0.0.1:" + String(process.env.PORT ?? 6901)),
+  console.log(`Tobiishi: http://127.0.0.1:${String(process.env.PORT ?? 6901)}`),
 );

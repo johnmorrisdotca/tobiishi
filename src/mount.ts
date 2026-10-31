@@ -122,31 +122,32 @@ const SHAPE_NOTES: Record<Shape, [string, string]> = {
  * ```
  */
 export function mount(host: HTMLElement, options: MountOptions = {}): Player {
+  let current = options;
   let shape =
-      options.shape ??
-      (SHAPES.includes(options.game?.board.name as Shape) ? (options.game!.board.name as Shape) : "english"),
-    material = options.material ?? "stone";
-  let lang = options.language ?? "en",
-    text = STRINGS[lang];
+    current.shape ??
+    (SHAPES.includes(current.game?.board.name as Shape) ? (current.game!.board.name as Shape) : "english");
+  let material = current.material ?? "stone";
+  let lang = current.language ?? "en";
+  let text = STRINGS[lang];
   let challenge =
-    options.challenge ??
+    current.challenge ??
     (shape === "english"
       ? classicEnglish()
       : shape === "triangle"
         ? classicTriangle()
-        : challengeOf(shape, options.seed));
-  let game = options.game ?? challenge.game,
-    selected: number | null = null,
-    focusCell = 0,
-    message = "",
-    destroyed = false,
-    challengeNumber = 0;
+        : challengeOf(shape, current.seed));
+  let game = current.game ?? challenge.game;
+  let selected: number | null = null;
+  let focusCell = 0;
+  let message = "";
+  let destroyed = false;
+  let challengeNumber = 0;
   const root = document.createElement("div");
   root.className = "tobiishi";
   host.append(root);
   function announce(next: Game): void {
     game = next;
-    options.onChange?.(game, gameCode(game));
+    current.onChange?.(game, gameCode(game));
   }
   function choose(cell: number): void {
     if (selected !== null) {
@@ -173,14 +174,14 @@ export function mount(host: HTMLElement, options: MountOptions = {}): Player {
   }
   function render(): void {
     if (destroyed) return;
-    const hadFocus = root.contains(document.activeElement) || !!options.settingsHost?.contains(document.activeElement),
-      focusedAction = (document.activeElement as HTMLElement | null)?.dataset.action;
+    const hadFocus = root.contains(document.activeElement) || !!current.settingsHost?.contains(document.activeElement);
+    const focusedAction = (document.activeElement as HTMLElement | null)?.dataset.action;
     root.replaceChildren();
-    options.settingsHost?.replaceChildren();
+    current.settingsHost?.replaceChildren();
     const style = document.createElement("style");
     style.textContent = `.tobiishi{font:16px/1.5 var(--font,system-ui,sans-serif);color:inherit;max-width:600px;margin:auto}.tobiishi *{box-sizing:border-box}.tobiishi button,.tobiishi select{font:inherit;border:1px solid var(--rule,#ddd6c6);border-radius:12px;background:var(--surface,#fbf8f1);color:var(--ink,#1f2320);padding:8px 12px;min-height:44px}.tobiishi button:focus-visible,.tobiishi select:focus-visible{outline:3px solid var(--accent,#b5452c);outline-offset:3px}.tobiishi .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}.tobiishi .board{position:relative;width:100%;touch-action:manipulation}.tobiishi svg{display:block;width:100%;height:auto}.tobiishi .cell{position:absolute;border:0;background:transparent;padding:0;border-radius:50%;min-height:0;aspect-ratio:1}.tobiishi .cell.legal{box-shadow:inset 0 0 0 3px var(--accent,#b5452c)}.tobiishi h2{font-weight:500;margin:0}.tobiishi .status{min-height:48px}.tobiishi [disabled]{opacity:.45}`;
     root.append(style);
-    if (!options.justBoard) {
+    if (!current.justBoard) {
       const heading = document.createElement("h2");
       heading.textContent = text.title;
       root.append(heading);
@@ -222,7 +223,7 @@ export function mount(host: HTMLElement, options: MountOptions = {}): Player {
             ? classicEnglish()
             : shape === "triangle"
               ? classicTriangle()
-              : challengeOf(shape, options.seed);
+              : challengeOf(shape, current.seed);
         selected = null;
         message = "";
         focusCell = 0;
@@ -245,7 +246,7 @@ export function mount(host: HTMLElement, options: MountOptions = {}): Player {
         render();
       });
       controls.append(materials);
-      if (options.settingsHost) {
+      if (current.settingsHost) {
         for (const [field, name] of [
           [selector, text.change],
           [materials, text.material],
@@ -257,28 +258,28 @@ export function mount(host: HTMLElement, options: MountOptions = {}): Player {
           label.append(caption, field);
           controls.append(label);
         }
-        options.settingsHost.append(controls);
+        current.settingsHost.append(controls);
       } else root.append(controls);
     }
     const board = document.createElement("div");
     board.className = "board";
     board.setAttribute("role", "group");
     board.setAttribute("aria-label", text.title);
-    board.innerHTML = draw(game, { material, theme: options.theme, selected, title: text.title });
+    board.innerHTML = draw(game, { material, theme: current.theme, selected, title: text.title });
     board.querySelector("svg")?.setAttribute("aria-hidden", "true");
-    const bounds = boundsOf(game),
-      destinations =
-        selected === null
-          ? []
-          : legalJumps(game)
-              .filter((j) => j.from === selected)
-              .map((j) => j.to);
+    const bounds = boundsOf(game);
+    const destinations =
+      selected === null
+        ? []
+        : legalJumps(game)
+            .filter((j) => j.from === selected)
+            .map((j) => j.to);
     game.board.cells.forEach((cell, i) => {
-      const p = pointOf(game, i),
-        b = button("", () => {
-          focusCell = i;
-          choose(i);
-        });
+      const p = pointOf(game, i);
+      const b = button("", () => {
+        focusCell = i;
+        choose(i);
+      });
       b.className = `cell${destinations.includes(i) ? " legal" : ""}`;
       b.dataset.cell = String(i);
       b.tabIndex = i === focusCell ? 0 : -1;
@@ -325,7 +326,7 @@ export function mount(host: HTMLElement, options: MountOptions = {}): Player {
         ? text.stuck
         : `${pegCount(game)} ${text.remaining}. ${message}`;
     root.append(status);
-    if (!options.justBoard) {
+    if (!current.justBoard) {
       const actions = document.createElement("div");
       actions.className = "controls fam-row";
       actions.dataset.helpEn =
@@ -352,8 +353,8 @@ export function mount(host: HTMLElement, options: MountOptions = {}): Player {
         challengeNumber += 1;
         challenge = generate(
           game.board,
-          `${options.seed ?? "tobiishi"}:${challengeNumber}`,
-          Math.min(options.challengeJumps ?? 12, game.board.cells.length - 1),
+          `${current.seed ?? "tobiishi"}:${challengeNumber}`,
+          Math.min(current.challengeJumps ?? 12, game.board.cells.length - 1),
         );
         selected = null;
         message = "";
@@ -389,7 +390,7 @@ export function mount(host: HTMLElement, options: MountOptions = {}): Player {
     }
     if (hadFocus) {
       const node = focusedAction
-        ? (options.settingsHost?.querySelector<HTMLElement>(`[data-action="${focusedAction}"]`) ??
+        ? (current.settingsHost?.querySelector<HTMLElement>(`[data-action="${focusedAction}"]`) ??
           root.querySelector<HTMLElement>(`[data-action="${focusedAction}"]`))
         : root.querySelector<HTMLElement>(`[data-cell="${focusCell}"]`);
       node?.focus();
@@ -405,7 +406,7 @@ export function mount(host: HTMLElement, options: MountOptions = {}): Player {
       render();
     },
     set: (changes) => {
-      options = { ...options, ...changes };
+      current = { ...current, ...changes };
       material = changes.material ?? material;
       lang = changes.language ?? lang;
       text = STRINGS[lang];
@@ -413,7 +414,7 @@ export function mount(host: HTMLElement, options: MountOptions = {}): Player {
     },
     destroy: () => {
       destroyed = true;
-      options.settingsHost?.replaceChildren();
+      current.settingsHost?.replaceChildren();
       root.remove();
     },
   };
