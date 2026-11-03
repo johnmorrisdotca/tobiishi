@@ -12,8 +12,11 @@ import {
   familyHeader,
   familyUnreviewed,
 } from "./family-template.mjs";
+import { publishThumbnails, thumbnailHead } from "./family-thumbnail.mjs";
 
 const id = "tobiishi";
+const ALT =
+  "Tobiishi: three peg solitaire boards drawn as SVG, the English cross in stone, a hexagon in wood and a heart in glass.";
 const icon =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%232f5d4a'/%3E%3Ctext x='50' y='68' font-size='34' text-anchor='middle' fill='%23f3efe4'%3E飛び石%3C/text%3E%3C/svg%3E";
 const head = familyHead({
@@ -22,7 +25,7 @@ const head = familyHead({
   description:
     "Peg solitaire on nine boards, with configurable stones and seeded solvable challenges. Free and open source, in English and Japanese.",
 });
-const page = `<!doctype html><html lang="en"><head>${head}<link rel="icon" href="${icon}"><link rel="stylesheet" href="demo/family.css"><link rel="stylesheet" href="demo/tobiishi.css"></head><body><main>${familyHeader(
+const page = `<!doctype html><html lang="en"><head>${head}${thumbnailHead(JSON.parse(await readFile("package.json", "utf8")), { alt: ALT })}<link rel="icon" href="${icon}"><link rel="stylesheet" href="demo/family.css"><link rel="stylesheet" href="demo/tobiishi.css"></head><body><main>${familyHeader(
   {
     id,
     links: [
@@ -39,6 +42,8 @@ await cp("dist", "site/dist", { recursive: true });
 await cp("README.md", "site/README.md");
 await cp("LICENSE", "site/LICENSE");
 await writeFile("site/index.html", page);
+// The family's card, dark card and icon, at <site>/thumbnail.png, thumbnail-dark.png and icon.png.
+publishThumbnails(".", "site");
 
 await cp("demo/family.css", "site/family.css");
 await writeFile("site/api.css", API_CSS);

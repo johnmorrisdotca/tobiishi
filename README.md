@@ -1,3 +1,5 @@
+<p align="center"><a href="https://johnmorrisdotca.github.io/tobiishi/"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/tobiishi/main/docs/images/thumbnail-dark.png"><img src="https://raw.githubusercontent.com/johnmorrisdotca/tobiishi/main/docs/images/thumbnail.png" alt="Tobiishi: three peg solitaire boards drawn as SVG, the English cross in stone, a hexagon in wood and a heart in glass." width="1200"></picture></a></p>
+
 <h1 align="center">Tobiishi <sub>飛び石</sub> — Peg solitaire</h1>
 
 <p align="center"><strong>Peg solitaire on classic boards and playful shapes.</strong><br>

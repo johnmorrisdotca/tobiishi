@@ -82,4 +82,33 @@ await takePictures({
       },
     },
   ],
+  // The family's thumbnail, dark thumbnail and icon (scripts/family-thumbnail.mjs): three boards as the board menu opens
+  // them, in the three materials: the English cross in stone, the hexagon in wood and the heart in glass; the icon is
+  // the English cross alone.
+  thumbnail: {
+    url: "/?lang=en",
+    ready: `${BOARD} svg`,
+    target: "#thumbnail-stage",
+    icon: { target: "#thumbnail-icon" },
+    label: "Tobiishi 飛び石",
+    async prepare(page) {
+      const boards = [];
+      for (const [shape, material] of [
+        ["english", "stone"],
+        ["hexagon", "wood"],
+        ["heart", "glass"],
+      ]) {
+        await choose(shape, material)(page);
+        boards.push(await page.locator(`${BOARD} svg`).evaluate((svg) => svg.outerHTML));
+      }
+      await page.evaluate((drawn) => {
+        const sized = (svg, height) =>
+          svg.replace("<svg ", `<svg style="display:block;height:${height}px;width:auto" `);
+        const stage = `<div id="thumbnail-stage" style="display:flex;gap:40px;align-items:center;padding:8px;width:max-content">${drawn.map((svg) => sized(svg, 330)).join("")}</div>`;
+        const icon = `<div id="thumbnail-icon" style="width:max-content;padding:8px">${sized(drawn[0], 420)}</div>`;
+        document.body.replaceChildren();
+        document.body.insertAdjacentHTML("beforeend", stage + icon);
+      }, boards);
+    },
+  },
 });
